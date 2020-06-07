@@ -39,7 +39,6 @@ class AccountsController extends Container
         $accounts = [];
 
         foreach ($accounts_list as $account) {
-            //Arr::delete($account, 'hashed_password');
             $accounts[] = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
         }
 
@@ -59,7 +58,7 @@ class AccountsController extends Container
         $query = $request->getQueryParams();
 
         if ($this->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('accounts_username')]));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
         return $this->twig->render($response, 'plugins/accounts/templates/login.html');
@@ -112,7 +111,7 @@ class AccountsController extends Container
         $query = $request->getQueryParams();
 
         if ($this->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile'));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
         return $this->twig->render($response, 'plugins/accounts/templates/registration.html');
@@ -191,6 +190,65 @@ class AccountsController extends Container
         Arr::delete($profile, 'role');
 
         return $this->twig->render($response, 'plugins/accounts/templates/profile.html', ['profile' => $profile]);
+    }
+
+    /**
+     * Profile edit page
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function profileEdit(Request $request, Response $response, array $args) : Response
+    {
+        // Get Query Params
+        $query = $request->getQueryParams();
+
+        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
+
+        Arr::delete($profile, 'uuid');
+        Arr::delete($profile, 'hashed_password');
+        Arr::delete($profile, 'role');
+
+        return $this->twig->render($response, 'plugins/accounts/templates/profile-edit.html', ['profile' => $profile]);
+    }
+
+    /**
+     * Profile edit page
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function profileEditProcess(Request $request, Response $response, array $args) : Response
+    {
+        // Get Data from POST
+        $post_data = $request->getParsedBody();
+
+        $username = $this->slugify->slugify($post_data['username']);
+
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
+
+            Arr::delete($post_data, 'csrf_name');
+            Arr::delete($post_data, 'csrf_value');
+            Arr::delete($post_data, 'password');
+            Arr::delete($post_data, 'action');
+
+            $user_file_body = Filesystem::read($_user_file);
+            $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
+
+            // Create admin account
+            if (Filesystem::write(
+                PATH['project'] . '/accounts/' . $username . '/profile.yaml',
+                $this->serializer->encode(
+                    array_merge($user_file_data, $post_data)
+                , 'yaml')
+            )) {
+                return $response->withRedirect($this->router->pathFor('accounts.login'));
+            }
+            return $response->withRedirect($this->router->pathFor('accounts.registration'));
+        }
+        return $response->withRedirect($this->router->pathFor('accounts.registration'));
     }
 
     /**

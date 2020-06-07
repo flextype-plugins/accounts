@@ -22,4 +22,6 @@ $app->group('/accounts', function () use ($app) : void {
 
 $app->group('/accounts', function () use ($app) : void {
     $app->post('/logout', 'AccountsController:logoutProcess')->setName('accounts.logoutProcess');
+    $app->get('/profile/{username}/edit', 'AccountsController:profileEdit')->setName('accounts.profileEdit');
+    $app->post('/profile/{username}/edit', 'AccountsController:profileEditProcess')->setName('accounts.profileEditProcess');
 })->add(new AccountsAuthMiddleware($flextype))->add('csrf');
