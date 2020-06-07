@@ -35,7 +35,15 @@ class AccountsController extends Container
         // Get Query Params
         $query = $request->getQueryParams();
 
-        return $this->twig->render($response, 'plugins/accounts/templates/index.html');
+        $accounts_list = Filesystem::listContents(PATH['project'] . '/accounts');
+        $accounts = [];
+
+        foreach ($accounts_list as $account) {
+            //Arr::delete($account, 'hashed_password');
+            $accounts[] = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+        }
+
+        return $this->twig->render($response, 'plugins/accounts/templates/index.html', ['accounts' => $accounts]);
     }
 
     /**
@@ -51,7 +59,7 @@ class AccountsController extends Container
         $query = $request->getQueryParams();
 
         if ($this->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile'));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('accounts_username')]));
         }
 
         return $this->twig->render($response, 'plugins/accounts/templates/login.html');
@@ -78,7 +86,7 @@ class AccountsController extends Container
                 Session::set('account_uuid', $user_file['uuid']);
                 Session::set('account_is_user_logged_in', true);
 
-                return $response->withRedirect($this->router->pathFor('accounts.profile'));
+                return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $user_file['username']]));
             }
 
             $this->flash->addMessage('error', __('admin_message_wrong_username_password'));
@@ -176,7 +184,13 @@ class AccountsController extends Container
         // Get Query Params
         $query = $request->getQueryParams();
 
-        return $this->twig->render($response, 'plugins/accounts/templates/profile.html');
+        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
+
+        Arr::delete($profile, 'uuid');
+        Arr::delete($profile, 'hashed_password');
+        Arr::delete($profile, 'role');
+
+        return $this->twig->render($response, 'plugins/accounts/templates/profile.html', ['profile' => $profile]);
     }
 
     /**

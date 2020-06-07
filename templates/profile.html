@@ -4,6 +4,16 @@
 
 <h3>Profile</h3>
 
+<table>
+    {% for key, value in profile %}
+    <tr>
+        <td>
+            {{ __('accounts_' ~ key) }}: {{ value }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
 <a class="dropdown__item" href="javascript:;" onclick="event.preventDefault();
         document.getElementById('accountsLogoutProcess').submit();">
     {{ tr('admin_logout') }}</a>

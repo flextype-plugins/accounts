@@ -2,6 +2,22 @@
 
 {% block content %}
 
-index
+<h3>Accounts</h3>
+
+<table class="tg">
+    <thead>
+      <tr>
+        <th>Username</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
+      <tr>
+        <td><a href="{{ path_for('accounts.profile', {'username':  account.username}) }}">{{ account.username }}</a></td>
+        <td>{{ account.registered_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
