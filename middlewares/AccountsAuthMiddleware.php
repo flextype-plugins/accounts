@@ -24,7 +24,7 @@ class AccountsAuthMiddleware extends Container
      */
     public function __invoke(Request $request, Response $response, callable $next) : Response
     {
-        if (Session::exists('accounts_user_is_loged')) {
+        if (Session::exists('account_is_user_logged_in')) {
             $response = $next($request, $response);
         } else {
             $response = $response->withRedirect($this->router->pathFor('accounts.login'));
