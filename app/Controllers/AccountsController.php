@@ -18,6 +18,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use function ltrim;
 use Ramsey\Uuid\Uuid;
 use Flextype\Component\Filesystem\Filesystem;
+use Flextype\Component\Session\Session;
 use Flextype\Component\Arr\Arr;
 
 class AccountsController extends Container
@@ -49,7 +50,45 @@ class AccountsController extends Container
         // Get Query Params
         $query = $request->getQueryParams();
 
+        if ($this->isUserLoggedIn()) {
+            return $response->withRedirect($this->router->pathFor('accounts.profile'));
+        }
+
         return $this->twig->render($response, 'plugins/accounts/templates/login.html');
+    }
+
+    /**
+     * Login page proccess
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function loginProcess(Request $request, Response $response, array $args) : Response
+    {
+        // Get Data from POST
+        $post_data = $request->getParsedBody();
+
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $post_data['username'] . '/profile.yaml')) {
+            $user_file = $this->serializer->decode(Filesystem::read($_user_file), 'yaml', false);
+
+            if (password_verify(trim($post_data['password']), $user_file['hashed_password'])) {
+                Session::set('account_username', $user_file['username']);
+                Session::set('account_role', $user_file['role']);
+                Session::set('account_uuid', $user_file['uuid']);
+                Session::set('account_is_user_logged_in', true);
+
+                return $response->withRedirect($this->router->pathFor('accounts.profile'));
+            }
+
+            $this->flash->addMessage('error', __('admin_message_wrong_username_password'));
+
+            return $response->withRedirect($this->router->pathFor('accounts.login'));
+        }
+
+        $this->flash->addMessage('error', __('admin_message_wrong_username_password'));
+
+        return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
 
     /**
@@ -64,6 +103,10 @@ class AccountsController extends Container
         // Get Query Params
         $query = $request->getQueryParams();
 
+        if ($this->isUserLoggedIn()) {
+            return $response->withRedirect($this->router->pathFor('accounts.profile'));
+        }
+
         return $this->twig->render($response, 'plugins/accounts/templates/registration.html');
     }
 
@@ -74,7 +117,7 @@ class AccountsController extends Container
      * @param Response $response PSR7 response
      * @param array    $args     Args
      */
-    public function registrationProccess(Request $request, Response $response, array $args) : Response
+    public function registrationProcess(Request $request, Response $response, array $args) : Response
     {
         // Get Data from POST
         $post_data = $request->getParsedBody();
@@ -134,5 +177,27 @@ class AccountsController extends Container
         $query = $request->getQueryParams();
 
         return $this->twig->render($response, 'plugins/accounts/templates/profile.html');
+    }
+
+    /**
+     * Logout page process
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     */
+    public function logoutProcess(Request $request, Response $response) : Response
+    {
+        Session::destroy();
+
+        return $response->withRedirect($this->router->pathFor('accounts.login'));
+    }
+
+    public function isUserLoggedIn()
+    {
+        if (Session::exists('account_is_user_logged_in')) {
+            return true;
+        }
+
+        return false;
     }
 }
