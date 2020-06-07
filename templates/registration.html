@@ -1,0 +1,5 @@
+{% extends 'themes/' ~ registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+
+{% block content %}
+    {{ form.render(serializer_decode(filesystem_read(PATH_PROJECT ~ '/fieldsets/registration.yaml'), 'yaml'), {})|raw }}
+{% endblock %}
