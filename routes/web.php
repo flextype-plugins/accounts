@@ -16,9 +16,10 @@ $app->group('/accounts', function () use ($app) : void {
     $app->get('/login', 'AccountsController:login')->setName('accounts.login');
     $app->post('/login', 'AccountsController:loginProcess')->setName('accounts.loginProcess');
     $app->get('/registration', 'AccountsController:registration')->setName('accounts.registration');
-    $app->post('/registration', 'AccountsController:registrationProccess')->setName('accounts.registrationProcess');
+    $app->post('/registration', 'AccountsController:registrationProcess')->setName('accounts.registrationProcess');
 })->add('csrf');
 
 $app->group('/accounts', function () use ($app) : void {
     $app->get('/profile', 'AccountsController:profile')->setName('accounts.profile');
+    $app->post('/logout', 'AccountsController:logoutProcess')->setName('accounts.logoutProcess');
 })->add(new AccountsAuthMiddleware($flextype))->add('csrf');
