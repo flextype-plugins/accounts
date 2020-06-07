@@ -2,6 +2,13 @@
 
 {% block content %}
 
-profile
+<h3>Profile</h3>
+
+<a class="dropdown__item" href="javascript:;" onclick="event.preventDefault();
+        document.getElementById('accountsLogoutProcess').submit();">
+    {{ tr('admin_logout') }}</a>
+<form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
+    {{ csrf() }}
+</form>
 
 {% endblock %}
