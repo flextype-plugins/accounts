@@ -76,9 +76,6 @@ class AccountsController extends Container
      */
     public function registrationProccess(Request $request, Response $response, array $args) : Response
     {
-        // Get Query Params
-        $query = $request->getQueryParams();
-
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
@@ -113,9 +110,9 @@ class AccountsController extends Container
             // Create admin account
             if (Filesystem::write(
                 PATH['project'] . '/accounts/' . $username . '/profile.yaml',
-                $this->serializer->encode([
+                $this->serializer->encode(
                     $post_data
-                ], 'yaml')
+                , 'yaml')
             )) {
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
