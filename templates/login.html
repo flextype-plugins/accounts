@@ -1,6 +1,6 @@
 {% extends 'themes/' ~ registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
 
 {% block content %}
-    <h3>Login</h3>
+    <h3>{{ __('accounts_login') }}</h3>
     {{ form.render(serializer_decode(filesystem_read(PATH_PROJECT ~ '/fieldsets/login.yaml'), 'yaml'), {})|raw }}
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h3>Profile</h3>
+<h3>{{ __('accounts_profile') }}</h3>
 
 <table>
     {% for key, value in profile %}
@@ -14,9 +14,8 @@
     {% endfor %}
 </table>
 
-<a class="dropdown__item" href="javascript:;" onclick="event.preventDefault();
-        document.getElementById('accountsLogoutProcess').submit();">
-    {{ tr('admin_logout') }}</a>
+<a href="{{ path_for('accounts.profileEdit', {'username': profile.username}) }}">{{ __('accounts_profile_edit') }}</a>
+<a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ __('accounts_logout') }}</a>
 <form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
     {{ csrf() }}
 </form>

@@ -1,5 +1,13 @@
+accounts: Accounts
 accounts_title: title
 accounts_description: description
 accounts_username: Username
 accounts_email: Email
 accounts_registered_at: Registered at
+accounts_profile_edit: Edit profile
+accounts_logout: Logout
+accounts_profile: Profile
+accounts_registration: Registration
+accounts_edit_profile: Edit profile
+accounts_login: Login
+accounts_state: State

@@ -2,14 +2,11 @@
 
 {% block content %}
 
-<h3>Edit Profile</h3>
-
+<h3>{{ __('accounts_edit_profile') }}</h3>
 
 {{ form.render(serializer_decode(filesystem_read(PATH_PROJECT ~ '/fieldsets/profile.yaml'), 'yaml'), profile)|raw }}
 
-<a class="dropdown__item" href="javascript:;" onclick="event.preventDefault();
-        document.getElementById('accountsLogoutProcess').submit();">
-    {{ tr('admin_logout') }}</a>
+<a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ tr('accounts_logout') }}</a>
 <form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
     {{ csrf() }}
 </form>
