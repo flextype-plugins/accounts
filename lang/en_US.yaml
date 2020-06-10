@@ -11,3 +11,4 @@ accounts_registration: Registration
 accounts_edit_profile: Edit profile
 accounts_login: Login
 accounts_state: State
+accounts_password: Password
