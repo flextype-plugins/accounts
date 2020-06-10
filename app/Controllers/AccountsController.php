@@ -42,7 +42,11 @@ class AccountsController extends Container
             $accounts[] = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
         }
 
-        return $this->twig->render($response, 'plugins/accounts/templates/index.html', ['accounts' => $accounts]);
+        return $this->twig->render($response, 'plugins/accounts/templates/index.html', ['accounts' => $accounts,
+                                                                                        'logged_in_username' => Session::get('account_username'),
+                                                                                        'logged_in_role' => Session::get('account_role'),
+                                                                                        'logged_in_uuid' => Session::get('account_uuid'),
+                                                                                        'logged_in' => Session::get('account_is_user_logged_in')]);
     }
 
     /**
@@ -152,7 +156,7 @@ class AccountsController extends Container
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'password');
-            Arr::delete($post_data, 'action');
+            Arr::delete($post_data, 'form-save-action');
 
             // Create accounts directory and account
             Filesystem::createDir(PATH['project'] . '/accounts/' . $this->slugify->slugify($post_data['username']));
@@ -189,7 +193,13 @@ class AccountsController extends Container
         Arr::delete($profile, 'hashed_password');
         Arr::delete($profile, 'role');
 
-        return $this->twig->render($response, 'plugins/accounts/templates/profile.html', ['profile' => $profile]);
+        return $this->twig->render($response,
+                                   'plugins/accounts/templates/profile.html',
+                                   ['profile' => $profile,
+                                    'logged_in_username' => Session::get('account_username'),
+                                    'logged_in_role' => Session::get('account_role'),
+                                    'logged_in_uuid' => Session::get('account_uuid'),
+                                    'logged_in' => Session::get('account_is_user_logged_in')]);
     }
 
     /**
@@ -206,11 +216,20 @@ class AccountsController extends Container
 
         $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
 
-        Arr::delete($profile, 'uuid');
-        Arr::delete($profile, 'hashed_password');
-        Arr::delete($profile, 'role');
+        if ($profile['username'] == Session::get('account_username')) {
 
-        return $this->twig->render($response, 'plugins/accounts/templates/profile-edit.html', ['profile' => $profile]);
+            Arr::delete($profile, 'uuid');
+            Arr::delete($profile, 'hashed_password');
+            Arr::delete($profile, 'role');
+
+            return $this->twig->render($response, 'plugins/accounts/templates/profile-edit.html', ['profile' => $profile,
+                                                                                                   'logged_in_username' => Session::get('account_username'),
+                                                                                                   'logged_in_role' => Session::get('account_role'),
+                                                                                                   'logged_in_uuid' => Session::get('account_uuid'),
+                                                                                                   'logged_in' => Session::get('account_is_user_logged_in')]);
+        } else {
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+        }
     }
 
     /**
@@ -232,7 +251,7 @@ class AccountsController extends Container
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'password');
-            Arr::delete($post_data, 'action');
+            Arr::delete($post_data, 'form-save-action');
 
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
