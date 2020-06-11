@@ -20,6 +20,36 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 2. Create new folder `/project/plugins/accounts`
 3. Download Accounts Plugin and unzip plugin content to the folder `/project/plugins/accounts`
 
+## Documentation
+
+### Settings
+
+| Key | Value | Description |
+|---|---|---|
+| enabled | true | true or false to disable the plugin |
+| priority | 80 | accounts plugin priority |
+
+### Restrict access in the entries frontmatter
+
+You may restrict access for specific users to your entry(entries) in the entry(entries) frontmatter, like this: 
+
+```
+---
+title: Lesson 42
+access:
+  accounts:
+    roles:
+      - student
+      - admin
+    usernames:
+      - jack
+      - sam
+    uuids:
+      - ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2
+      - d549af27-79a0-44f2-b9b1-e82b47bf87e2
+---
+```
+
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
 Copyright (c) 2020 [Sergey Romanenko](https://github.com/Awilum)
