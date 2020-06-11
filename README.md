@@ -158,6 +158,8 @@ Hello [userLoggedInUsername], your uuid: [userLoggedInUuid] and your role: [user
 
 Example:
 
+`/project/entries/lessons/lesson-42.md`
+
 ```
 ---
 title: [userLoggedIn][userLoggedInUsername] - [/userLoggedIn]Lesson 42
@@ -168,9 +170,6 @@ Public text here...
     Private content here..
 [/userLoggedIn]
 ```
-
-### Restrict access in the twig templates.
-
 
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
