@@ -303,7 +303,6 @@ class AccountsController extends Container
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
 
-
     /**
      * isUserLoggedIn
      *

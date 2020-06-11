@@ -38,3 +38,8 @@ include_once 'routes/web.php';
  * Include dependencies
  */
 include_once 'dependencies.php';
+
+/**
+ * Include Entries ACL
+ */
+include_once 'entries_acl.php';
