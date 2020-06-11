@@ -154,13 +154,23 @@ title: Lesson 42
 Hello [userLoggedInUsername], your uuid: [userLoggedInUuid] and your role: [userLoggedInRole]
 ```
 
-Also you may use any of this shortcodes inside any entry fields, like this:
+### Also you may use any of this shortcodes inside any entry fields:
+
+Example:
 
 ```
 ---
-title: [userLoggedInUsername] - Lesson 42
+title: [userLoggedIn][userLoggedInUsername] - [/userLoggedIn]Lesson 42
 ---
+Public text here...
+
+[userLoggedIn]
+    Private content here..
+[/userLoggedIn]
 ```
+
+### Restrict access in the twig templates.
+
 
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
