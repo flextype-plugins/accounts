@@ -58,6 +58,9 @@ Lesson content is here...
 You may restrict access for specific users to your specific content inside the entry by using shortcodes.
 
 #### Show private content for logged in users
+
+`/project/entries/lessons/lesson-42.md`
+
 ```
 ---
 title: Lesson 42
@@ -70,6 +73,9 @@ Public text here...
 ```
 
 #### Show private content for users with roles: admin and student
+
+`/project/entries/lessons/lesson-42.md`
+
 ```
 ---
 title: Lesson 42
