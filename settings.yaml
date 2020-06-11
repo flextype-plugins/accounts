@@ -1,2 +1,5 @@
 # enabled: true or false to disable the plugin
 enabled: true
+
+# Accounts plugin priority
+priority: 80
