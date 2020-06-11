@@ -87,6 +87,80 @@ Public text here...
 [/userLoggedInRoleOneOf]
 ```
 
+#### Show private content for users with uuids ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2 and d549af27-79a0-44f2-b9b1-e82b47bf87e2
+
+`/project/entries/lessons/lesson-42.md`
+
+```
+---
+title: Lesson 42
+---
+Public text here...
+
+[userLoggedInUuidOneOf uuids="ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2, d549af27-79a0-44f2-b9b1-e82b47bf87e2"]
+    Private content here..
+[/userLoggedInUuidOneOf]
+```
+
+#### Show private content for users with usernames jack, sam
+
+`/project/entries/lessons/lesson-42.md`
+
+```
+---
+title: Lesson 42
+---
+Public text here...
+
+[userLoggedInUsernameOneOf usernames="jack, sam"]
+    Private content here..
+[/userLoggedInUsernameOneOf]
+```
+
+### Show logged in username
+
+`/project/entries/lessons/lesson-42.md`
+
+```
+---
+title: Lesson 42
+---
+
+Hello [userLoggedInUsername]
+```
+
+### Show logged in uuid
+
+`/project/entries/lessons/lesson-42.md`
+
+```
+---
+title: Lesson 42
+---
+
+Hello [userLoggedInUsername], your uuid: [userLoggedInUuid]
+```
+
+
+### Show logged in role
+
+`/project/entries/lessons/lesson-42.md`
+
+```
+---
+title: Lesson 42
+---
+
+Hello [userLoggedInUsername], your uuid: [userLoggedInUuid] and your role: [userLoggedInRole]
+```
+
+Also you may use any of this shortcodes inside any entry fields, like this:
+
+```
+---
+title: [userLoggedInUsername] - Lesson 42
+---
+```
 
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
