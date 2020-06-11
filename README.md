@@ -31,7 +31,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 
 ### Restrict access in the entries frontmatter
 
-You may restrict access for specific users to your entry(entries) in the entry(entries) frontmatter, like this:
+You may restrict access for specific users to your entry(entries) in the entry(entries) frontmatter.
 
 `/project/entries/lessons/lesson-42.md`
 
@@ -52,6 +52,25 @@ access:
 ---
 Lesson content is here...
 ```
+
+### Restrict access in the entries content
+
+You may restrict access for specific users to your specific content inside the entry by using shortcodes.
+
+#### Show private content for logged in users
+```
+[userLoggedIn]
+    Private content here..
+[/userLoggedIn]
+```
+
+#### Show private content for users with roles: admin and student
+```
+[userLoggedInRoleOneOf roles="admin, student"]
+    Private content here..
+[/userLoggedInRoleOneOf]
+```
+
 
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
