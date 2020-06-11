@@ -53,19 +53,29 @@ access:
 Lesson content is here...
 ```
 
-### Restrict access in the entries content
+### Restrict access in the entries content and in any other entry custom field.
 
 You may restrict access for specific users to your specific content inside the entry by using shortcodes.
 
 #### Show private content for logged in users
 ```
+---
+title: Lesson 42
+---
+Public text here...
+
 [userLoggedIn]
-    Private content here..
+    Lesson content is here...
 [/userLoggedIn]
 ```
 
 #### Show private content for users with roles: admin and student
 ```
+---
+title: Lesson 42
+---
+Public text here...
+
 [userLoggedInRoleOneOf roles="admin, student"]
     Private content here..
 [/userLoggedInRoleOneOf]
