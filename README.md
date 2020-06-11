@@ -31,7 +31,9 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 
 ### Restrict access in the entries frontmatter
 
-You may restrict access for specific users to your entry(entries) in the entry(entries) frontmatter, like this: 
+You may restrict access for specific users to your entry(entries) in the entry(entries) frontmatter, like this:
+
+`/project/entries/lessons/lesson-42.md`
 
 ```
 ---
@@ -48,6 +50,7 @@ access:
       - ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2
       - d549af27-79a0-44f2-b9b1-e82b47bf87e2
 ---
+Lesson content is here...
 ```
 
 ## LICENSE
