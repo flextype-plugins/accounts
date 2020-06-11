@@ -315,4 +315,19 @@ class AccountsController extends Container
 
         return false;
     }
+
+    public function getUserLoggedInUsername()
+    {
+        return Session::get('account_username');
+    }
+
+    public function getUserLoggedInRole()
+    {
+        return Session::get('account_role');
+    }
+
+    public function getUserLoggedInUuid()
+    {
+        return Session::get('account_uuid');
+    }
 }
