@@ -42,11 +42,15 @@ class AccountsController extends Container
             $accounts[] = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
         }
 
-        return $this->twig->render($response, 'plugins/accounts/templates/index.html', ['accounts' => $accounts,
-                                                                                        'logged_in_username' => Session::get('account_username'),
-                                                                                        'logged_in_role' => Session::get('account_role'),
-                                                                                        'logged_in_uuid' => Session::get('account_uuid'),
-                                                                                        'logged_in' => Session::get('account_is_user_logged_in')]);
+        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/index.html';
+        $plugin_template_path = 'plugins/accounts/templates/index.html';
+        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path, ['accounts' => $accounts,
+                                                               'logged_in_username' => Session::get('account_username'),
+                                                               'logged_in_role' => Session::get('account_role'),
+                                                               'logged_in_uuid' => Session::get('account_uuid'),
+                                                               'logged_in' => Session::get('account_is_user_logged_in')]);
     }
 
     /**
@@ -65,7 +69,11 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
-        return $this->twig->render($response, 'plugins/accounts/templates/login.html');
+        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
+        $plugin_template_path = 'plugins/accounts/templates/login.html';
+        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path);
     }
 
     /**
@@ -118,7 +126,11 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
-        return $this->twig->render($response, 'plugins/accounts/templates/registration.html');
+        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
+        $plugin_template_path = 'plugins/accounts/templates/registration.html';
+        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path);
     }
 
     /**
@@ -193,8 +205,12 @@ class AccountsController extends Container
         Arr::delete($profile, 'hashed_password');
         Arr::delete($profile, 'role');
 
+        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
+        $plugin_template_path = 'plugins/accounts/templates/profile.html';
+        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+
         return $this->twig->render($response,
-                                   'plugins/accounts/templates/profile.html',
+                                   $template_path,
                                    ['profile' => $profile,
                                     'logged_in_username' => Session::get('account_username'),
                                     'logged_in_role' => Session::get('account_role'),
@@ -216,17 +232,21 @@ class AccountsController extends Container
 
         $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
 
+        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
+        $plugin_template_path = 'plugins/accounts/templates/profile-edit.html';
+        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+
         if ($profile['username'] == Session::get('account_username')) {
 
             Arr::delete($profile, 'uuid');
             Arr::delete($profile, 'hashed_password');
             Arr::delete($profile, 'role');
 
-            return $this->twig->render($response, 'plugins/accounts/templates/profile-edit.html', ['profile' => $profile,
-                                                                                                   'logged_in_username' => Session::get('account_username'),
-                                                                                                   'logged_in_role' => Session::get('account_role'),
-                                                                                                   'logged_in_uuid' => Session::get('account_uuid'),
-                                                                                                   'logged_in' => Session::get('account_is_user_logged_in')]);
+            return $this->twig->render($response, $template_path, ['profile' => $profile,
+                                                                   'logged_in_username' => Session::get('account_username'),
+                                                                   'logged_in_role' => Session::get('account_role'),
+                                                                   'logged_in_uuid' => Session::get('account_uuid'),
+                                                                   'logged_in' => Session::get('account_is_user_logged_in')]);
         } else {
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
@@ -283,6 +303,11 @@ class AccountsController extends Container
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
 
+
+    /**
+     * isUserLoggedIn
+     *
+     */
     public function isUserLoggedIn()
     {
         if (Session::exists('account_is_user_logged_in')) {
