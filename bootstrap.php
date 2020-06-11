@@ -16,7 +16,7 @@ use function is_file;
 /**
  * Ensure vendor libraries exist
  */
-! is_file($accounts_autoload = __DIR__ . '/vendor/autoload.php') and exit('Please run: <i>composer install</i> for site plugin');
+! is_file($accounts_autoload = __DIR__ . '/vendor/autoload.php') and exit('Please run: <i>composer install</i> for accounts plugin');
 
 /**
  * Register The Auto Loader
@@ -38,6 +38,11 @@ include_once 'routes/web.php';
  * Include dependencies
  */
 include_once 'dependencies.php';
+
+/**
+ * Include shortcodes
+ */
+include_once 'shortcodes/AccountsShortcodesExtension.php';
 
 /**
  * Include Entries ACL

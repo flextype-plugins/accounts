@@ -8,8 +8,8 @@ $flextype->emitter->addListener('onEntryAfterInitialized', function() use ($flex
 
     $entry = $flextype->entries->entry;
 
-    if (isset($entry['access']['roles'])) {
-        if (!in_array(Session::get('account_role'), $entry['access']['roles'])) {
+    if (isset($entry['access']['accounts']['roles'])) {
+        if (!in_array(Session::get('account_role'), $entry['access']['accounts']['roles'])) {
             $flextype->entries->entry = [];
         }
     }
