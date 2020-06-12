@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace Flextype;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Flextype\Component\Filesystem\Filesystem;
 use function is_file;
 
 /**
