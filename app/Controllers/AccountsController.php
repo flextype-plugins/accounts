@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Flextype;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 use Slim\Http\Environment;
 use Slim\Http\Uri;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -180,6 +182,30 @@ class AccountsController extends Container
                     $post_data
                 , 'yaml')
             )) {
+
+                // Instantiation and passing `true` enables exceptions
+                $mail = new PHPMailer(true);
+
+                $new_user_email = $this->serializer(Filesystem::read(PATH['project'] . '/plugins/emails/new-user.html'), 'frontmatter');
+
+                //Recipients
+                $mail->setFrom($new_user_email['from'], 'Mailer');
+                $mail->addAddress($post_data['email'], $username);
+
+                $tags = ['[sitename]' => $this->registry->get('plugins.site.settings.title'),
+                         '[username]' => $this->getUserLoggedInUsername()];
+
+                $subject = $flextype->parser->parse($new_user_email['subject'], 'shortcodes');
+                $content = $flextype->parser->parse($flextype->parser->parse($new_user_email['content'], 'shortcodes'), 'markdown');
+
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = strtr($subject, $tags);
+                $mail->Body    = strtr($content, $tags);
+
+                // Send email
+                $mail->send();
+
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
             return $response->withRedirect($this->router->pathFor('accounts.registration'));
