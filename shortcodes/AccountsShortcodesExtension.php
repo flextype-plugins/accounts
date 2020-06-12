@@ -22,9 +22,9 @@ $flextype['shortcodes']->addHandler('userLoggedInUuid', static function (Shortco
     return $flextype->AccountsController->getuserLoggedInUuid();
 });
 
-// Shortcode: [userLoggedInRole]
-$flextype['shortcodes']->addHandler('userLoggedInRole', static function (ShortcodeInterface $s) use ($flextype) {
-    return $flextype->AccountsController->getuserLoggedInRole();
+// Shortcode: [userLoggedInRoles]
+$flextype['shortcodes']->addHandler('userLoggedInRoles', static function (ShortcodeInterface $s) use ($flextype) {
+    return $flextype->AccountsController->getuserLoggedInRoles();
 });
 
 // Shortcode: [userLoggedIn]Private content here..[/userLoggedIn]
@@ -35,9 +35,9 @@ $flextype['shortcodes']->addHandler('userLoggedIn', function (ShortcodeInterface
     return '';
 });
 
-// Shortcode: [userLoggedInRoleOneOf roles="admin, student"]Private content here..[/userLoggedInRoleOneOf]
-$flextype['shortcodes']->addHandler('userLoggedInRoleOneOf', function (ShortcodeInterface $s) use ($flextype) {
-    if (in_array($flextype->AccountsController->getuserLoggedInRole(), array_map('trim', explode(",", $s->getParameter('roles'))))) {
+// Shortcode: [userLoggedInRolesOneOf roles="admin, student"]Private content here..[/userLoggedInRolesOneOf]
+$flextype['shortcodes']->addHandler('userLoggedInRolesOneOf', function (ShortcodeInterface $s) use ($flextype) {
+    if ($flextype->AccountsController->validateUserLoggedInRoles($s->getParameter('roles'), $flextype->AccountsController->getuserLoggedInRoles())) {
         return $s->getContent();
     }
     return '';

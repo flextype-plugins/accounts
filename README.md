@@ -48,15 +48,9 @@ You may restrict access for specific users to your entry(entries) in the entry(e
 title: Lesson 42
 access:
   accounts:
-    roles:
-      - student
-      - admin
-    usernames:
-      - jack
-      - sam
-    uuids:
-      - ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2
-      - d549af27-79a0-44f2-b9b1-e82b47bf87e2
+    roles: student, admin
+    usernames: jack, sam
+    uuids: ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2, d549af27-79a0-44f2-b9b1-e82b47bf87e2
 ---
 Lesson content is here...
 ```

@@ -50,7 +50,7 @@ class AccountsController extends Container
 
         return $this->twig->render($response, $template_path, ['accounts' => $accounts,
                                                                'logged_in_username' => Session::get('account_username'),
-                                                               'logged_in_role' => Session::get('account_role'),
+                                                               'logged_in_roles' => Session::get('account_roles'),
                                                                'logged_in_uuid' => Session::get('account_uuid'),
                                                                'logged_in' => Session::get('account_is_user_logged_in')]);
     }
@@ -95,7 +95,7 @@ class AccountsController extends Container
 
             if (password_verify(trim($post_data['password']), $user_file['hashed_password'])) {
                 Session::set('account_username', $user_file['username']);
-                Session::set('account_role', $user_file['role']);
+                Session::set('account_roles', $user_file['roles']);
                 Session::set('account_uuid', $user_file['uuid']);
                 Session::set('account_is_user_logged_in', true);
 
@@ -165,7 +165,7 @@ class AccountsController extends Container
             $post_data['registered_at']   = $time;
             $post_data['uuid']            = $uuid;
             $post_data['hashed_password'] = $hashed_password;
-            $post_data['role']            = 'user';
+            $post_data['roles']            = 'user';
 
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
@@ -229,7 +229,7 @@ class AccountsController extends Container
 
         Arr::delete($profile, 'uuid');
         Arr::delete($profile, 'hashed_password');
-        Arr::delete($profile, 'role');
+        Arr::delete($profile, 'roles');
 
         $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
         $plugin_template_path = 'plugins/accounts/templates/profile.html';
@@ -239,7 +239,7 @@ class AccountsController extends Container
                                    $template_path,
                                    ['profile' => $profile,
                                     'logged_in_username' => Session::get('account_username'),
-                                    'logged_in_role' => Session::get('account_role'),
+                                    'logged_in_roles' => Session::get('account_roles'),
                                     'logged_in_uuid' => Session::get('account_uuid'),
                                     'logged_in' => Session::get('account_is_user_logged_in')]);
     }
@@ -266,11 +266,11 @@ class AccountsController extends Container
 
             Arr::delete($profile, 'uuid');
             Arr::delete($profile, 'hashed_password');
-            Arr::delete($profile, 'role');
+            Arr::delete($profile, 'roles');
 
             return $this->twig->render($response, $template_path, ['profile' => $profile,
                                                                    'logged_in_username' => Session::get('account_username'),
-                                                                   'logged_in_role' => Session::get('account_role'),
+                                                                   'logged_in_roles' => Session::get('account_roles'),
                                                                    'logged_in_uuid' => Session::get('account_uuid'),
                                                                    'logged_in' => Session::get('account_is_user_logged_in')]);
         } else {
@@ -347,13 +347,27 @@ class AccountsController extends Container
         return Session::get('account_username');
     }
 
-    public function getUserLoggedInRole()
+    public function getUserLoggedInRoles()
     {
-        return Session::get('account_role');
+        return Session::get('account_roles');
     }
 
     public function getUserLoggedInUuid()
     {
         return Session::get('account_uuid');
+    }
+
+    public function validateUserLoggedInRoles($user_roles, $logged_in_user_roles)
+    {
+        $user_roles           = array_map('trim', explode(',', $user_roles));
+        $logged_in_user_roles = array_map('trim', explode(',', $logged_in_user_roles));
+
+        $result = array_intersect($user_roles, $logged_in_user_roles);
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return true;
     }
 }
