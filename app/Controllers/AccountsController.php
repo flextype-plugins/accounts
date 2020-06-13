@@ -359,15 +359,17 @@ class AccountsController extends Container
 
     public function validateUserLoggedInRoles($user_roles, $logged_in_user_roles)
     {
-        $user_roles           = array_map('trim', explode(',', $user_roles));
-        $logged_in_user_roles = array_map('trim', explode(',', $logged_in_user_roles));
+        if (!empty($user_roles) and !empty($logged_in_user_roles)) {
+            $user_roles           = array_map('trim', explode(',', $user_roles));
+            $logged_in_user_roles = array_map('trim', explode(',', $logged_in_user_roles));
 
-        $result = array_intersect($user_roles, $logged_in_user_roles);
+            $result = array_intersect($user_roles, $logged_in_user_roles);
 
-        if (empty($result)) {
-            return false;
+            if (!empty($result)) {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 }
