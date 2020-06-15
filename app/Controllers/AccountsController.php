@@ -296,8 +296,15 @@ class AccountsController extends Container
 
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
-            Arr::delete($post_data, 'password');
             Arr::delete($post_data, 'form-save-action');
+
+            if (!empty($post_data['new_password'])) {
+                $post_data['hashed_password'] = password_hash($post_data['new_password'], PASSWORD_BCRYPT);
+                Arr::delete($post_data, 'new_password');
+            } else {
+                Arr::delete($post_data, 'password');
+                Arr::delete($post_data, 'new_password');
+            }
 
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
