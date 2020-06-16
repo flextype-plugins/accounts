@@ -47,9 +47,9 @@ class AccountsController extends Container
             $accounts[] = $account;
         }
 
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/index.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/index.html';
         $plugin_template_path = 'plugins/accounts/templates/index.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         return $this->twig->render($response, $template_path, ['accounts' => $accounts,
                                                                'logged_in_username' => Session::get('account_username'),
@@ -71,9 +71,9 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
         $plugin_template_path = 'plugins/accounts/templates/login.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         return $this->twig->render($response, $template_path);
     }
@@ -125,9 +125,9 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
         $plugin_template_path = 'plugins/accounts/templates/registration.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         return $this->twig->render($response, $template_path);
     }
@@ -142,9 +142,9 @@ class AccountsController extends Container
      */
     public function resetPassword(Request $request, Response $response, array $args) : Response
     {
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
         $plugin_template_path = 'plugins/accounts/templates/reset-password.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         return $this->twig->render($response, $template_path);
     }
@@ -183,7 +183,11 @@ class AccountsController extends Container
                     // Instantiation and passing `true` enables exceptions
                     $mail = new PHPMailer(true);
 
-                    $new_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/plugins/accounts/emails/new-password.md'), 'frontmatter');
+                    $theme_new_password_email_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/emails/new-password.md';
+                    $plugin_new_password_email_path = 'plugins/accounts/emails/new-password.md';
+                    $email_template_path = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_new_password_email_path : $plugin_new_password_email_path;
+
+                    $new_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                     //Recipients
                     $mail->setFrom($new_password_email['from'], 'Mailer');
@@ -259,7 +263,11 @@ class AccountsController extends Container
                 // Instantiation and passing `true` enables exceptions
                 $mail = new PHPMailer(true);
 
-                $reset_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/plugins/accounts/emails/reset-password.md'), 'frontmatter');
+                $theme_reset_password_email_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/emails/reset-password.md';
+                $plugin_reset_password_email_path = 'plugins/accounts/emails/reset-password.md';
+                $email_template_path = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
+
+                $reset_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
                 $mail->setFrom($reset_password_email['from'], 'Mailer');
@@ -344,7 +352,11 @@ class AccountsController extends Container
                 // Instantiation and passing `true` enables exceptions
                 $mail = new PHPMailer(true);
 
-                $new_user_email = $this->serializer(Filesystem::read(PATH['project'] . '/plugins/emails/new-user.html'), 'frontmatter');
+                $theme_new_user_email_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/emails/new-user.md';
+                $plugin_new_user_email_path = 'plugins/accounts/emails/new-user.md';
+                $email_template_path = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
+
+                $new_user_email = $this->serializer(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
                 $mail->setFrom($new_user_email['from'], 'Mailer');
@@ -387,9 +399,9 @@ class AccountsController extends Container
         Arr::delete($profile, 'hashed_password_reset');
         Arr::delete($profile, 'roles');
 
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
         $plugin_template_path = 'plugins/accounts/templates/profile.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         return $this->twig->render($response,
                                    $template_path,
@@ -411,9 +423,9 @@ class AccountsController extends Container
     {
         $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
 
-        $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
+        $theme_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
         $plugin_template_path = 'plugins/accounts/templates/profile-edit.html';
-        $template_path = Filesystem::has(PATH['project'] . '/' . $themes_template_path) ? $themes_template_path : $plugin_template_path;
+        $template_path = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
         if ($profile['username'] == Session::get('account_username')) {
 
