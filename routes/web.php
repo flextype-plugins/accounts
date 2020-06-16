@@ -15,6 +15,9 @@ $app->group('/accounts', function () use ($app) : void {
     $app->get('', 'AccountsController:index')->setName('accounts.index');
     $app->get('/login', 'AccountsController:login')->setName('accounts.login');
     $app->post('/login', 'AccountsController:loginProcess')->setName('accounts.loginProcess');
+    $app->get('/reset-password', 'AccountsController:resetPassword')->setName('accounts.resetPassword');
+    $app->post('/reset-password', 'AccountsController:resetPasswordProcess')->setName('accounts.resetPasswordProcess');
+    $app->get('/new-password/{username}/{hash}', 'AccountsController:newPasswordProcess')->setName('accounts.newPasswordProcess');
     $app->get('/registration', 'AccountsController:registration')->setName('accounts.registration');
     $app->post('/registration', 'AccountsController:registrationProcess')->setName('accounts.registrationProcess');
     $app->get('/profile/{username}', 'AccountsController:profile')->setName('accounts.profile');

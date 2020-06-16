@@ -12,3 +12,5 @@ accounts_edit_profile: Edit profile
 accounts_login: Login
 accounts_state: State
 accounts_password: Password
+accounts_forgot_password: Forgot Password ?
+accounts_reset_password: Reset Password
