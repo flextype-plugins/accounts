@@ -1,5 +1,5 @@
 ---
-subject: Welcome to [sitename]!
+subject: Your new password for [sitename]!
 from: test@flextype.org
 ---
 Dear [username],
