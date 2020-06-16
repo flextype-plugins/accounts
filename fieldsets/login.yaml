@@ -4,18 +4,24 @@ icon: 'far fa-file-alt'
 size: 4/12
 hide: true
 form:
-  submit:
-    title: 'Login'
+  buttons:
+    submit:
+      type: submit
+      title: accounts_login
+    forgot_password:
+      type: link
+      title: accounts_forgot_password
+      href: ./reset-password
   fields:
     username:
-      title: Username
+      title: accounts_username
       type: text
       size: 12
       validation:
         required: true
         pattern: '^[a-z0-9_-]{3,16}$'
     password:
-      title: Password
+      title: accounts_password
       type: password
       size: 12
       validation:

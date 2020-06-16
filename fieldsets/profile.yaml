@@ -1,14 +1,17 @@
-title: Registration
+title: Profile
 default_field: title
 icon: 'far fa-file-alt'
-size: 4/12
 hide: true
+size: 4/12
 form:
-  name: registration
   buttons:
     submit:
       type: submit
-      title: 'Create User'
+      title: 'Save'
+    back:
+      type: button
+      title: 'Cancel'
+      href: './'
   fields:
     username:
       title: Username
@@ -17,16 +20,13 @@ form:
       validation:
         required: true
         pattern: '^[a-z0-9_-]{3,16}$'
-    password:
-      title: Password
-      type: password
-      size: 12
-      validation:
-        required: true
-        pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
     email:
       title: Email
       type: email
       size: 12
       validation:
-        required: false
+        required: true
+    new_password:
+      title: New password
+      type: password
+      size: 12
