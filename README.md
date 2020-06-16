@@ -6,8 +6,7 @@
 
 ## Features
 
-* Built in predesigned pages: Accounts List, Login, Registration, Account Profile and Account Edit Profile.
-* Fully customizable pages: Login, Registration, Account Profile pages with custom Fieldsets.
+* Built in predesigned and fully customizable pages: Accounts List, Login, Registration, Password Reset, Account Profile and Account Edit Profile.
 * Simple and Flexible ACL(Access Control List) for any entries or any specific data.
 * Built in Shortcodes and Twig functions to restrict access for specific users.  
 
@@ -29,6 +28,22 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 4. Copy all fieldsets from `/project/plugins/accounts/fieldsets` to `/project/fieldsets` folder.
 
 ## Documentation
+
+### Routes
+| Method | Route | Route Name | Description |
+|---|---|---|
+| GET | /accounts | `accounts.index` | Page with a list of registered accounts |
+| GET | /accounts/login | `accounts.login` | Login page |
+| GET | /accounts/registration | `accounts.registration` | Registration page |
+| GET | /accounts/reset-password | `accounts.resetPassword` | Reset password page |
+| GET | /accounts/profile/{username} | `accounts.profile` | Profile page |
+| GET | /accounts/profile/{username}/edit | `accounts.profileEdit` | Profile page |
+| POST | /accounts/profile/{username}/edit | `accounts.profileEditProcess` | Profile edit process |
+| POST | /accounts/registration | `accounts.profileRegistrationProcess` | Profile registration process |
+| POST | /accounts/login | `accounts.profileLoginProcess` | Profile login process |
+| POST | /accounts/logout | `accounts.profileLogoutProcess` | Profile login process |
+| POST | /accounts/reset-password | `accounts.resetPasswordProcess` | Reset password process |
+| POST | /new-password/{username}/{hash}' | `accounts.newPasswordProcess` | New password process |
 
 ### Settings
 
