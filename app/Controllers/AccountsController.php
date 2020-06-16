@@ -210,8 +210,6 @@ class AccountsController extends Container
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
             return $response->withRedirect($this->router->pathFor('accounts.login'));
-            }
-        return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
