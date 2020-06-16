@@ -8,7 +8,7 @@
 
 * Built in predesigned and fully customizable pages: Accounts List, Login, Registration, Password Reset, Account Profile and Account Edit Profile.
 * Simple and Flexible ACL(Access Control List) for any entries or any specific data.
-* Built in Shortcodes and Twig functions to restrict access for specific users.  
+* Built in Shortcodes and Twig functions to restrict access for specific users in the entries content and templates.  
 
 ## Dependencies
 
