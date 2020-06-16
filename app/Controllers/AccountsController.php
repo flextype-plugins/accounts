@@ -501,9 +501,6 @@ class AccountsController extends Container
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
 
-    /**
-     * isUserLoggedIn
-     */
     public function isUserLoggedIn() : bool
     {
         if (Session::exists('account_is_user_logged_in')) {

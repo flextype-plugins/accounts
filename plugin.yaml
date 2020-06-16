@@ -13,3 +13,4 @@ license: MIT
 dependencies:
   flextype: 0.9.8
   site: '>=1.0.0'
+  twig: '>=1.0.0'

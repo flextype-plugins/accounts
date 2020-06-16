@@ -11,7 +11,7 @@ form:
     forgot_password:
       type: link
       title: accounts_forgot_password
-      href: ./reset-password
+      href: './reset-password'
   fields:
     username:
       title: accounts_username

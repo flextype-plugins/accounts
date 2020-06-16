@@ -17,8 +17,7 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "ext-json": "*",
-        "phpmailer/phpmailer": "~6.1"
+        "ext-json": "*"
     },
     "config": {
         "apcu-autoloader": true,
