@@ -38,7 +38,13 @@ class AccountsController extends Container
         $accounts = [];
 
         foreach ($accounts_list as $account) {
-            $accounts[] = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+
+            $account = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+
+            Arr::delete($account, 'hashed_password');
+            Arr::delete($account, 'hashed_password_reset');
+
+            $accounts[] = $account;
         }
 
         $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/index.html';
@@ -157,7 +163,7 @@ class AccountsController extends Container
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
-            if (password_verify(trim($args['hash']), $user_file_data['reset_password_hash'])) {
+            if (password_verify(trim($args['hash']), $user_file_data['hashed_password_reset'])) {
 
                 // Generate new passoword
                 $raw_password = bin2hex(random_bytes(16));
@@ -165,7 +171,7 @@ class AccountsController extends Container
 
                 $user_file_data['hashed_password'] = $hashed_password;
 
-                Arr::delete($user_file_data, 'reset_password_hash');
+                Arr::delete($user_file_data, 'hashed_password_reset');
 
                 if (Filesystem::write(
                     PATH['project'] . '/accounts/' . $username . '/profile.yaml',
@@ -237,7 +243,7 @@ class AccountsController extends Container
             Arr::delete($post_data, 'form-save-action');
             Arr::delete($post_data, 'username');
 
-            $post_data['reset_password_hash'] = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
+            $post_data['hashed_password_reset'] = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
 
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
@@ -378,6 +384,7 @@ class AccountsController extends Container
 
         Arr::delete($profile, 'uuid');
         Arr::delete($profile, 'hashed_password');
+        Arr::delete($profile, 'hashed_password_reset');
         Arr::delete($profile, 'roles');
 
         $themes_template_path = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
