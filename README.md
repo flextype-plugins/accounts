@@ -134,7 +134,7 @@ Public text here...
 [/userLoggedInUsernameOneOf]
 ```
 
-### Show logged in username
+#### Show logged in username
 
 `/project/entries/lessons/lesson-42.md`
 
@@ -146,7 +146,7 @@ title: Lesson 42
 Hello [userLoggedInUsername]
 ```
 
-### Show logged in uuid
+#### Show logged in uuid
 
 `/project/entries/lessons/lesson-42.md`
 
@@ -158,7 +158,7 @@ title: Lesson 42
 Hello [userLoggedInUsername], your uuid: [userLoggedInUuid]
 ```
 
-### Show logged in role
+#### Show logged in roles
 
 `/project/entries/lessons/lesson-42.md`
 
@@ -167,10 +167,10 @@ Hello [userLoggedInUsername], your uuid: [userLoggedInUuid]
 title: Lesson 42
 ---
 
-Hello [userLoggedInUsername], your uuid: [userLoggedInUuid] and your role: [userLoggedInRole]
+Hello [userLoggedInUsername], your uuid: [userLoggedInUuid] and your roles: [userLoggedInRole]
 ```
 
-### Also you may use any of this shortcodes inside any entry fields:
+#### Also you may use any of this shortcodes inside any entry fields:
 
 Example:
 
@@ -223,22 +223,82 @@ You may restrict access for specific users to your specific content inside the T
 {% endif %}
 ```
 
-### Show logged in username
+#### Show logged in username
 
 ```
 Hello {{ accounts.getUserLoggedInUsername }}
 ```
 
-### Show logged in uuid
+#### Show logged in uuid
 
 ```
-Hello {{ accounts.getUserLoggedInUsername }}, your uuid: {{ accounts.getUserLoggedInUuid }}
+Hello {{ accounts.getUserLoggedInUsername }},
+your uuid: {{ accounts.getUserLoggedInUuid }}
 ```
 
-### Show logged in role
+#### Show logged in roles
 
 ```
-Hello {{ accounts.getUserLoggedInUsername }}, your uuid: {{ accounts.getUserLoggedInUuid }} and your role: {{ accounts.getUserLoggedInRoles }}
+Hello {{ accounts.getUserLoggedInUsername }},
+your uuid: {{ accounts.getUserLoggedInUuid }}
+and your roles: {{ accounts.getUserLoggedInRoles }}
+```
+
+### Restrict access in the PHP
+
+You may restrict access for specific users to your specific code in the PHP.
+
+#### Run private code for logged in users
+
+```php
+if ($flextype->AccountsController->isUserLoggedIn()) {
+    // Private code here..
+}
+```
+
+#### Run private content for users with roles: admin and student
+
+```php
+if ($flextype->AccountsController->isUserLoggedInRolesOneOf('admin, student')) {
+    // Private code here..
+}
+```
+
+#### Run private code for users with uuids ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2 and d549af27-79a0-44f2-b9b1-e82b47bf87e2
+
+```php
+if ($flextype->AccountsController->isUserLoggedInUuidOneOf('ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2, d549af27-79a0-44f2-b9b1-e82b47bf87e2') {
+    // Private content here..
+}
+```
+
+#### Run private code for users with usernames jack, sam
+
+```php
+if ($flextype->AccountsController->isUserLoggedInUsernameOneOf('jack, sam')) {
+    // Private content here..
+}
+```
+
+#### Show logged in username
+
+```php
+echo 'Hello ' . $flextype->AccountsController->getUserLoggedInUsername();
+```
+
+#### Show logged in uuid
+
+```php
+echo 'Hello ' . $flextype->AccountsController->getUserLoggedInUsername();
+echo 'your uuid: ' . $flextype->AccountsController->getUserLoggedInUuid();
+```
+
+#### Show logged in roles
+
+```php
+echo 'Hello ' . $flextype->AccountsController->getUserLoggedInUsername();
+echo 'your uuid: ' . $flextype->AccountsController->getUserLoggedInUuid();
+echo 'and your roles: ' . $flextype->AccountsController->getUserLoggedInRoles();
 ```
 
 ## LICENSE
