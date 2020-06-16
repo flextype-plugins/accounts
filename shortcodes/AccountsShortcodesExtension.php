@@ -14,17 +14,26 @@ use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 // Shortcode: [userLoggedInUsername]
 $flextype['shortcodes']->addHandler('userLoggedInUsername', static function (ShortcodeInterface $s) use ($flextype) {
-    return $flextype->AccountsController->getUserLoggedInUsername();
+    if ($flextype->AccountsController->getUserLoggedInUsername()) {
+        return $flextype->AccountsController->getUserLoggedInUsername();
+    }
+    return '';
 });
 
 // Shortcode: [userLoggedInUuid]
 $flextype['shortcodes']->addHandler('userLoggedInUuid', static function (ShortcodeInterface $s) use ($flextype) {
-    return $flextype->AccountsController->getuserLoggedInUuid();
+    if ($flextype->AccountsController->getUserLoggedInUuid()) {
+        return $flextype->AccountsController->getUserLoggedInUuid();
+    }
+    return '';
 });
 
 // Shortcode: [userLoggedInRoles]
 $flextype['shortcodes']->addHandler('userLoggedInRoles', static function (ShortcodeInterface $s) use ($flextype) {
-    return $flextype->AccountsController->getuserLoggedInRoles();
+    if ($flextype->AccountsController->getUserLoggedInRoles()) {
+        return $flextype->AccountsController->getUserLoggedInRoles();
+    }
+    return '';
 });
 
 // Shortcode: [userLoggedIn]Private content here..[/userLoggedIn]
@@ -37,7 +46,7 @@ $flextype['shortcodes']->addHandler('userLoggedIn', function (ShortcodeInterface
 
 // Shortcode: [userLoggedInRolesOneOf roles="admin, student"]Private content here..[/userLoggedInRolesOneOf]
 $flextype['shortcodes']->addHandler('userLoggedInRolesOneOf', function (ShortcodeInterface $s) use ($flextype) {
-    if ($flextype->AccountsController->validateUserLoggedInRoles($s->getParameter('roles'), $flextype->AccountsController->getuserLoggedInRoles())) {
+    if ($flextype->AccountsController->isUserLoggedInRolesOneOf($s->getParameter('roles'))) {
         return $s->getContent();
     }
     return '';
@@ -45,7 +54,7 @@ $flextype['shortcodes']->addHandler('userLoggedInRolesOneOf', function (Shortcod
 
 // Shortcode: [userLoggedInUuidOneOf uuids="ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2, d549af27-79a0-44f2-b9b1-e82b47bf87e2"]Private content here..[/userLoggedInUuidOneOf]
 $flextype['shortcodes']->addHandler('userLoggedInUuidOneOf', function (ShortcodeInterface $s) use ($flextype) {
-    if (in_array($flextype->AccountsController->getuserLoggedInUuid(), array_map('trim', explode(",", $s->getParameter('roles'))))) {
+    if ($flextype->AccountsController->isUserLoggedInUuidOneOf($s->getParameter('uuids'))) {
         return $s->getContent();
     }
     return '';
@@ -53,7 +62,7 @@ $flextype['shortcodes']->addHandler('userLoggedInUuidOneOf', function (Shortcode
 
 // Shortcode: [userLoggedInUsernameOneOf usernames="jack, sam"]Private content here..[/userLoggedInUsernameOneOf]
 $flextype['shortcodes']->addHandler('userLoggedInUsernameOneOf', function (ShortcodeInterface $s) use ($flextype) {
-    if (in_array($flextype->AccountsController->getUserLoggedInUsername(), array_map('trim', explode(",", $s->getParameter('roles'))))) {
+    if ($flextype->AccountsController->isUserLoggedInUsernameOneOf($s->getParameter('usernames'))) {
         return $s->getContent();
     }
     return '';

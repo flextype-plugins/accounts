@@ -503,9 +503,8 @@ class AccountsController extends Container
 
     /**
      * isUserLoggedIn
-     *
      */
-    public function isUserLoggedIn()
+    public function isUserLoggedIn() : bool
     {
         if (Session::exists('account_is_user_logged_in')) {
             return true;
@@ -514,34 +513,46 @@ class AccountsController extends Container
         return false;
     }
 
-    public function getUserLoggedInUsername()
+    public function isUserLoggedInRolesOneOf(string $roles) : bool
     {
-        return Session::get('account_username');
-    }
-
-    public function getUserLoggedInRoles()
-    {
-        return Session::get('account_roles');
-    }
-
-    public function getUserLoggedInUuid()
-    {
-        return Session::get('account_uuid');
-    }
-
-    public function validateUserLoggedInRoles($user_roles, $logged_in_user_roles)
-    {
-        if (!empty($user_roles) and !empty($logged_in_user_roles)) {
-            $user_roles           = array_map('trim', explode(',', $user_roles));
-            $logged_in_user_roles = array_map('trim', explode(',', $logged_in_user_roles));
-
-            $result = array_intersect($user_roles, $logged_in_user_roles);
-
-            if (!empty($result)) {
-                return true;
-            }
+        if (!empty(array_intersect(array_map('trim', explode(",", $roles)),
+                                   array_map('trim', explode(",", $this->getUserLoggedInRoles()))))) {
+            return true;
         }
 
         return false;
+    }
+
+    public function isUserLoggedInUsernameOneOf(string $usernames) : bool
+    {
+        if (in_array($this->getUserLoggedInUsername(), array_map('trim', explode(",", $usernames)))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isUserLoggedInUuidOneOf(string $uuids) : bool
+    {
+        if (in_array($this->getUserLoggedInUuid(), array_map('trim', explode(",", $uuids)))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getUserLoggedInUsername() : string
+    {
+        return Session::exists('account_username') ? Session::get('account_username') : '';
+    }
+
+    public function getUserLoggedInRoles() : string
+    {
+        return Session::exists('account_roles') ? Session::get('account_roles') : '';
+    }
+
+    public function getUserLoggedInUuid() : string
+    {
+        return Session::exists('account_uuid') ? Session::get('account_uuid') : '';
     }
 }

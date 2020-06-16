@@ -99,9 +99,9 @@ title: Lesson 42
 ---
 Public text here...
 
-[userLoggedInRoleOneOf roles="admin, student"]
+[userLoggedInRolesOneOf roles="admin, student"]
     Private content here..
-[/userLoggedInRoleOneOf]
+[/userLoggedInRolesOneOf]
 ```
 
 #### Show private content for users with uuids ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2 and d549af27-79a0-44f2-b9b1-e82b47bf87e2
@@ -158,7 +158,6 @@ title: Lesson 42
 Hello [userLoggedInUsername], your uuid: [userLoggedInUuid]
 ```
 
-
 ### Show logged in role
 
 `/project/entries/lessons/lesson-42.md`
@@ -186,6 +185,60 @@ Public text here...
 [userLoggedIn]
     Private content here..
 [/userLoggedIn]
+```
+
+### Restrict access in the TWIG Templates
+
+You may restrict access for specific users to your specific content inside the TWIG Templates.
+
+#### Show private content for logged in users
+
+```
+{% if accounts.isUserLoggedIn() %}
+    Private content here..
+{% endif %}
+```
+
+#### Show private content for users with roles: admin and student
+
+```
+{% if accounts.isUserLoggedInRolesOneOf('admin, student') %}
+    Private content here..
+{% endif %}
+```
+
+#### Show private content for users with uuids ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2 and d549af27-79a0-44f2-b9b1-e82b47bf87e2
+
+```
+{% if accounts.isUserLoggedInUuidOneOf('ea7432a3-b2d5-4b04-b31d-1c5acc7a55e2, d549af27-79a0-44f2-b9b1-e82b47bf87e2') %}
+    Private content here..
+{% endif %}
+```
+
+#### Show private content for users with usernames jack, sam
+
+```
+{% if accounts.isUserLoggedInUsernameOneOf('jack, sam') %}
+    Private content here..
+{% endif %}
+```
+
+### Show logged in username
+
+```
+Hello {{ accounts.getUserLoggedInUsername }}
+```
+
+### Show logged in uuid
+
+```
+Hello {{ accounts.getUserLoggedInUsername }}, your uuid: {{ accounts.getUserLoggedInUuid }}
+```
+
+### Show logged in role
+
+```
+Hello {{ accounts.getUserLoggedInUsername }}, your uuid: {{ accounts.getUserLoggedInUuid }} and your role: {{ accounts.getUserLoggedInRoles }}
 ```
 
 ## LICENSE

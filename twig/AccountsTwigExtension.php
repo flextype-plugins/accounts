@@ -73,8 +73,8 @@ class AccountsTwig
         return $this->flextype->AccountsController->getUserLoggedInUuid();
     }
 
-    public function validateUserLoggedInRoles($user_roles, $logged_in_user_roles)
+    public function isUserLoggedInRolesOneOf($roles)
     {
-        return $this->flextype->AccountsController->validateUserLoggedInRoles($user_roles, $logged_in_user_roles);
+        return $this->flextype->AccountsController->isUserLoggedInRolesOneOf($roles);
     }
 }
