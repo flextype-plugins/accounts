@@ -31,7 +31,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 
 ### Routes
 | Method | Route | Route Name | Description |
-|---|---|---|
+|---|---|---|---|
 | GET | /accounts | `accounts.index` | Page with a list of registered accounts |
 | GET | /accounts/login | `accounts.login` | Login page |
 | GET | /accounts/registration | `accounts.registration` | Registration page |
