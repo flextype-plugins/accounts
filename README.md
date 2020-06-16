@@ -43,7 +43,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | POST | /accounts/login | `accounts.profileLoginProcess` | Profile login process |
 | POST | /accounts/logout | `accounts.profileLogoutProcess` | Profile login process |
 | POST | /accounts/reset-password | `accounts.resetPasswordProcess` | Reset password process |
-| POST | /new-password/{username}/{hash}' | `accounts.newPasswordProcess` | New password process |
+| POST | /new-password/{username}/{hash} | `accounts.newPasswordProcess` | New password process |
 
 ### Settings
 
