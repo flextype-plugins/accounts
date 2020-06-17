@@ -1,5 +1,5 @@
 accounts: Accounts
-accounts_title: title
+accounts_title: Title
 accounts_description: description
 accounts_username: Username
 accounts_email: Email
@@ -14,3 +14,9 @@ accounts_state: State
 accounts_password: Password
 accounts_forgot_password: Forgot Password ?
 accounts_reset_password: Reset Password
+accounts_full_name: Full name
+accounts_new_password: New Password
+accounts_cancel: Cancel
+accounts_save: Save
+accounts_create_user: Create User
+accounts_reset: Reset

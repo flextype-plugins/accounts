@@ -483,12 +483,15 @@ class AccountsController extends Container
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
-        $username = $this->slugify->slugify($post_data['username']);
+        // Get username
+        $username = $args['username'];
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'form-save-action');
+            Arr::delete($post_data, 'password');
+            Arr::delete($post_data, 'username');
 
             if (! empty($post_data['new_password'])) {
                 $post_data['hashed_password'] = password_hash($post_data['new_password'], PASSWORD_BCRYPT);
