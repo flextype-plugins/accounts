@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Flextype;
 
-use Flextype\Component\Filesystem\Filesystem;
 use function is_file;
 
 /**
