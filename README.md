@@ -51,6 +51,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 |---|---|---|
 | enabled | true | true or false to disable the plugin |
 | priority | 80 | accounts plugin priority |
+| allow_registration | true | Allow user registration `true` or `false` |
 
 ### Restrict access in the entries frontmatter
 

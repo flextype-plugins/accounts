@@ -1,7 +1,7 @@
 name: Accounts
 version: 1.0.0
-description: Accunts plugins for Flextype.
-icon: fas fa-globe
+description: Acciunts plugins for Flextype.
+icon: fas fa-users
 author:
   name: Sergey Romanenko
   email: support@flextype.org
