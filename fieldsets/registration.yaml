@@ -1,6 +1,6 @@
 title: Registration
 default_field: title
-icon: 'far fa-file-alt'
+icon: fas fa-users
 size: 4/12
 hide: true
 form:
@@ -8,24 +8,24 @@ form:
   buttons:
     submit:
       type: submit
-      title: 'Create User'
+      title: accounts_create_user
   fields:
     username:
-      title: Username
+      title: accounts_username
       type: text
       size: 12
       validation:
         required: true
         pattern: '^[a-z0-9_-]{3,16}$'
     password:
-      title: Password
+      title: accounts_password
       type: password
       size: 12
       validation:
         required: true
         pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
     email:
-      title: Email
+      title: accounts_email
       type: email
       size: 12
       validation:

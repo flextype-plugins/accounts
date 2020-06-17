@@ -1,6 +1,6 @@
 title: Login
 default_field: title
-icon: 'far fa-file-alt'
+icon: fas fa-users
 size: 4/12
 hide: true
 form:
@@ -11,7 +11,7 @@ form:
     forgot_password:
       type: link
       title: accounts_forgot_password
-      href: './reset-password'
+      href: ./reset-password
   fields:
     username:
       title: accounts_username
