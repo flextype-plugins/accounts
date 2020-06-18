@@ -47,6 +47,11 @@ class AccountsController extends Container
         $accounts      = [];
 
         foreach ($accounts_list as $account) {
+
+            if ($account['type'] !== 'dir' || ! Filesystem::has($account['path'] . '/' . 'profile.yaml')) {
+                continue;
+            }
+
             $account = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
 
             Arr::delete($account, 'hashed_password');
@@ -71,7 +76,7 @@ class AccountsController extends Container
      */
     public function login(Request $request, Response $response, array $args) : Response
     {
-        if ($this->isUserLoggedIn()) {
+        if ($this->acl->isUserLoggedIn()) {
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
         }
 
@@ -373,7 +378,7 @@ class AccountsController extends Container
 
                 $tags = [
                     '[sitename]' => $this->registry->get('plugins.site.settings.title'),
-                    '[username]' => $this->getUserLoggedInUsername(),
+                    '[username]' => $this->acl->getUserLoggedInUsername(),
                 ];
 
                 $subject = $this->parser->parse($new_user_email['subject'], 'shortcodes');

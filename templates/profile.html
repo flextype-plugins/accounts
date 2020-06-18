@@ -12,8 +12,8 @@
         </tr>
         {% endfor %}
     </table>
-
-    {% if logged_in_username == profile.username %}
+    
+    {% if acl.getUserLoggedInUsername() == profile.username %}
         <a href="{{ path_for('accounts.profileEdit', {'username': profile.username}) }}">{{ __('accounts_profile_edit') }}</a>
         <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ __('accounts_logout') }}</a>
         <form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
