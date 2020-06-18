@@ -17,7 +17,3 @@ namespace Flextype;
 $flextype['AccountsController'] = static function ($container) {
     return new AccountsController($container);
 };
-
-
-// Add Accounts Twig Extension
-$flextype->twig->addExtension(new AccountsTwigExtension($flextype));

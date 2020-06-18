@@ -21,14 +21,10 @@ use Ramsey\Uuid\Uuid;
 use Slim\Http\Environment;
 use Slim\Http\Uri;
 use const PASSWORD_BCRYPT;
-use function array_intersect;
-use function array_map;
 use function array_merge;
 use function bin2hex;
 use function date;
-use function explode;
 use function Flextype\Component\I18n\__;
-use function in_array;
 use function password_hash;
 use function password_verify;
 use function random_bytes;
@@ -63,13 +59,7 @@ class AccountsController extends Container
         $plugin_template_path = 'plugins/accounts/templates/index.html';
         $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
-        return $this->twig->render($response, $template_path, [
-            'accounts' => $accounts,
-            'logged_in_username' => Session::get('account_username'),
-            'logged_in_roles' => Session::get('account_roles'),
-            'logged_in_uuid' => Session::get('account_uuid'),
-            'logged_in' => Session::get('account_is_user_logged_in'),
-        ]);
+        return $this->twig->render($response, $template_path, ['accounts' => $accounts]);
     }
 
     /**
@@ -82,7 +72,7 @@ class AccountsController extends Container
     public function login(Request $request, Response $response, array $args) : Response
     {
         if ($this->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
@@ -135,7 +125,7 @@ class AccountsController extends Container
      */
     public function registration(Request $request, Response $response, array $args) : Response
     {
-        if ($this->isUserLoggedIn()) {
+        if ($this->acl->isUserLoggedIn()) {
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
         }
 
@@ -429,13 +419,7 @@ class AccountsController extends Container
         return $this->twig->render(
             $response,
             $template_path,
-            [
-                'profile' => $profile,
-                'logged_in_username' => Session::get('account_username'),
-                'logged_in_roles' => Session::get('account_roles'),
-                'logged_in_uuid' => Session::get('account_uuid'),
-                'logged_in' => Session::get('account_is_user_logged_in'),
-            ]
+            ['profile' => $profile]
         );
     }
 
@@ -459,13 +443,7 @@ class AccountsController extends Container
             Arr::delete($profile, 'hashed_password');
             Arr::delete($profile, 'roles');
 
-            return $this->twig->render($response, $template_path, [
-                'profile' => $profile,
-                'logged_in_username' => Session::get('account_username'),
-                'logged_in_roles' => Session::get('account_roles'),
-                'logged_in_uuid' => Session::get('account_uuid'),
-                'logged_in' => Session::get('account_is_user_logged_in'),
-            ]);
+            return $this->twig->render($response, $template_path, ['profile' => $profile]);
         }
 
         return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
@@ -532,59 +510,5 @@ class AccountsController extends Container
         Session::destroy();
 
         return $response->withRedirect($this->router->pathFor('accounts.login'));
-    }
-
-    public function isUserLoggedIn() : bool
-    {
-        if (Session::exists('account_is_user_logged_in')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUserLoggedInRolesOneOf(string $roles) : bool
-    {
-        if (! empty(array_intersect(
-            array_map('trim', explode(',', $roles)),
-            array_map('trim', explode(',', $this->getUserLoggedInRoles()))
-        ))) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUserLoggedInUsernameOneOf(string $usernames) : bool
-    {
-        if (in_array($this->getUserLoggedInUsername(), array_map('trim', explode(',', $usernames)))) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isUserLoggedInUuidOneOf(string $uuids) : bool
-    {
-        if (in_array($this->getUserLoggedInUuid(), array_map('trim', explode(',', $uuids)))) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function getUserLoggedInUsername() : string
-    {
-        return Session::exists('account_username') ? Session::get('account_username') : '';
-    }
-
-    public function getUserLoggedInRoles() : string
-    {
-        return Session::exists('account_roles') ? Session::get('account_roles') : '';
-    }
-
-    public function getUserLoggedInUuid() : string
-    {
-        return Session::exists('account_uuid') ? Session::get('account_uuid') : '';
     }
 }
