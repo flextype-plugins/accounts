@@ -20,6 +20,6 @@ accounts_new_password: Neues Passwort
 accounts_cancel: Abbrechen
 accounts_save: Speichern
 accounts_create_user: Benutzer erstellen
-accounts_reset: Reset
-accounts_message_wrong_username_password: "Wrong username or password"
-accounts_message_new_password_was_sended: "New password was sended"
+accounts_reset: Zurücksetzen
+accounts_message_wrong_username_password: "Benutzername oder Passwort falsch"
+accounts_message_new_password_was_sended: "Neues Passwort wurde gesendet"
