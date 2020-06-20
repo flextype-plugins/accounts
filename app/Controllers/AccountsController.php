@@ -355,7 +355,8 @@ class AccountsController extends Container
             $post_data['registered_at']   = $time;
             $post_data['uuid']            = $uuid;
             $post_data['hashed_password'] = $hashed_password;
-            $post_data['roles']           = $this->registry->get('plugins.accounts.settings.registration.roles');
+            $post_data['roles']           = $this->registry->get('plugins.accounts.settings.registration.default_roles');
+            $post_data['state']           = $this->registry->get('plugins.accounts.settings.registration.default_state');
 
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');

@@ -10,3 +10,4 @@ from:
 
 registration:
   default_roles: user
+  default_state: enabled
