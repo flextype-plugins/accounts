@@ -53,7 +53,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | from.email | support@flextype.org | From email |
 | registration.enabled | true | Allow user registration `true` or `false` |
 | registration.default_roles | user | Default roles for new users |
-| registration.default_roles | user | Default roles for new users |
+| registration.default_state | enabled | Default state for new users |
 | registration.redirect.route.name | accounts.login | Redirect route name after new user registered. |
 | registration.redirect.route.link |  | Redirect link after new user registered. |
 | login.redirect.route.name | accounts.profile | Redirect route name after user logs in. |
