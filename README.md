@@ -49,10 +49,23 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | Key | Value | Description |
 |---|---|---|
 | enabled | true | true or false to disable the plugin |
-| priority | 80 | accounts plugin priority |
+| priority | 80 | Accounts plugin priority |
 | from.email | support@flextype.org | From email |
 | registration.enabled | true | Allow user registration `true` or `false` |
 | registration.default_roles | user | Default roles for new users |
+| registration.default_roles | user | Default roles for new users |
+| registration.redirect.route.name | user | Redirect route name after new user registered. |
+| registration.redirect.route.link | user | Redirect link after new user registered. |
+| login.redirect.route.name | user | Redirect route name after user logs in. |
+| login.redirect.route.link | user | Redirect link after user logs in. |
+| profile_edit.redirect.route.name | user | Redirect route name after user profile edited. |
+| profile_edit.redirect.route.link | user | Redirect link after user profile edited. |
+| new_password.redirect.route.name | user | Redirect route name after new password was sended. |
+| new_password.redirect.route.link | user | Redirect link after new password was sended. |
+| reset_password.redirect.route.name | user | Redirect route name after password was reset. |
+| reset_password.redirect.route.link | user | Redirect link after password was reset. |
+| logout.redirect.route.name | user | Redirect route name after user logs out. |
+| logout.redirect.route.link | user | Redirect link after user logs out.|
 
 ### Events
 

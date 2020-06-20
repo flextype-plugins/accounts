@@ -76,7 +76,7 @@ class AccountsController extends Container
     public function login(Request $request, Response $response, array $args) : Response
     {
         if ($this->acl->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
+            //return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
@@ -107,15 +107,29 @@ class AccountsController extends Container
                 Session::set('account_uuid', $user_file['uuid']);
                 Session::set('account_is_user_logged_in', true);
 
-                return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $user_file['username']]));
+                // Run event onAccountsUserLoggedIn
+                $this->emitter->emit('onAccountsUserLoggedIn');
+
+                // Add redirect to route name or to specific link
+                if ($this->registry->get('plugins.accounts.settings.login.redirect.route')) {
+                    if ($this->registry->get('plugins.accounts.settings.login.redirect.route.name') == 'accounts.profile') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['username' => $user_file['username']]));
+                    }
+
+                    if ($this->registry->get('plugins.accounts.settings.login.redirect.route.name') == 'accounts.profileEdit') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['username' => $user_file['username']]));
+                    }
+
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name')));
+                } else {
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.login.redirect.link'));
+                }
             }
 
             $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
 
-            // Run event onAccountsUserLoggedIn
-            $this->emitter->emit('onAccountsUserLoggedIn');
-
             return $response->withRedirect($this->router->pathFor('accounts.login'));
+
         }
 
         $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
@@ -200,7 +214,12 @@ class AccountsController extends Container
                 // Run event onAccountsNewPasswordSended
                 $this->emitter->emit('onAccountsNewPasswordSended');
 
-                return $response->withRedirect($this->router->pathFor('accounts.login'));
+                // Add redirect to route name or to specific link
+                if ($this->registry->get('plugins.accounts.settings.new_password.redirect.route')) {
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.new_password.redirect.route.name')));
+                } else {
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.new_password.redirect.link'));
+                }
             }
 
             return $response->withRedirect($this->router->pathFor('accounts.login'));
@@ -300,7 +319,12 @@ class AccountsController extends Container
                 // Run event onAccountsPasswordReset
                 $this->emitter->emit('onAccountsPasswordReset');
 
-                return $response->withRedirect($this->router->pathFor('accounts.login'));
+                // Add redirect to route name or to specific link
+                if ($this->registry->get('plugins.accounts.settings.reset_password.redirect.route')) {
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.reset_password.redirect.route.name')));
+                } else {
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.reset_password.redirect.link'));
+                }
             }
 
             return $response->withRedirect($this->router->pathFor('accounts.registration'));
@@ -415,7 +439,20 @@ class AccountsController extends Container
                 // Run event onAccountsNewUserRegistered
                 $this->emitter->emit('onAccountsNewUserRegistered');
 
-                return $response->withRedirect($this->router->pathFor('accounts.login'));
+                // Add redirect to route name or to specific link
+                if ($this->registry->get('plugins.accounts.settings.registration.redirect.route')) {
+                    if ($this->registry->get('plugins.accounts.settings.registration.redirect.route.name') == 'accounts.profile') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['username' => $user_file['username']]));
+                    }
+
+                    if ($this->registry->get('plugins.accounts.settings.registration.redirect.route.name') == 'accounts.profileEdit') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['username' => $user_file['username']]));
+                    }
+
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name')));
+                } else {
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.registration.redirect.link'));
+                }
             }
 
             return $response->withRedirect($this->router->pathFor('accounts.registration'));
@@ -522,7 +559,20 @@ class AccountsController extends Container
                 // Run event onAccountsProfileEdited
                 $this->emitter->emit('onAccountsProfileEdited');
 
-                return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+                // Add redirect to route name or to specific link
+                if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route')) {
+                    if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name') == 'accounts.profile') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                    }
+
+                    if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name') == 'accounts.profileEdit') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                    }
+
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name')));
+                } else {
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.edit_profile.redirect.link'));
+                }
             }
 
             return $response->withRedirect($this->router->pathFor('accounts.registration'));
@@ -544,6 +594,13 @@ class AccountsController extends Container
         // Run event onAccountsLogout
         $this->emitter->emit('onAccountsLogout');
 
-        return $response->withRedirect($this->router->pathFor('accounts.login'));
+        // Add redirect to route name or to specific link
+        if ($this->registry->get('plugins.accounts.settings.logout.redirect.route')) {
+            return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.logout.redirect.route.name')));
+        } else {
+            return $response->withRedirect($this->registry->get('plugins.accounts.settings.logout.redirect.link'));
+        }
+
+
     }
 }
