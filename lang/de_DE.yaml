@@ -1,23 +1,25 @@
 ---
-accounts: Accounts
-accounts_title: Title
-accounts_description: description
-accounts_username: Username
+accounts: Konten
+accounts_title: Titel
+accounts_description: beschreibung
+accounts_username: Benutzername
 accounts_email: Email
-accounts_registered_at: Registered at
-accounts_profile_edit: Edit profile
-accounts_logout: Logout
-accounts_profile: Profile
-accounts_registration: Registration
-accounts_edit_profile: Edit profile
-accounts_login: Login
-accounts_state: State
-accounts_password: Password
-accounts_forgot_password: Forgot Password ?
-accounts_reset_password: Reset Password
-accounts_full_name: Full name
-accounts_new_password: New Password
-accounts_cancel: Cancel
-accounts_save: Save
-accounts_create_user: Create User
-accounts_reset: Reset
+accounts_registered_at: Registriert am
+accounts_profile_edit: Profil bearbeiten
+accounts_logout: Abmelden
+accounts_profile: Profil
+accounts_registration: Registrierung
+accounts_edit_profile: Profil bearbeiten
+accounts_login: Anmeldung
+accounts_state: Zustand
+accounts_password: Passwort
+accounts_forgot_password: Passwort vergessen?
+accounts_reset_password: Passwort zurücksetzen
+accounts_full_name: Vollständiger Name
+accounts_new_password: Neues Passwort
+accounts_cancel: Abbrechen
+accounts_save: Speichern
+accounts_create_user: Benutzer erstellen
+accounts_reset: Zurücksetzen
+accounts_message_wrong_username_password: "Benutzername oder Passwort falsch"
+accounts_message_new_password_was_sended: "Neues Passwort wurde gesendet"

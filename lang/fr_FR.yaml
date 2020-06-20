@@ -1,23 +1,25 @@
 ---
-accounts: Accounts
-accounts_title: Title
-accounts_description: description
-accounts_username: Username
+accounts: Comptes
+accounts_title: Titre
+accounts_description: la description
+accounts_username: Nom d'utilisateur
 accounts_email: Email
-accounts_registered_at: Registered at
-accounts_profile_edit: Edit profile
-accounts_logout: Logout
-accounts_profile: Profile
-accounts_registration: Registration
-accounts_edit_profile: Edit profile
-accounts_login: Login
-accounts_state: State
-accounts_password: Password
-accounts_forgot_password: Forgot Password ?
-accounts_reset_password: Reset Password
-accounts_full_name: Full name
-accounts_new_password: New Password
-accounts_cancel: Cancel
-accounts_save: Save
-accounts_create_user: Create User
-accounts_reset: Reset
+accounts_registered_at: Enregistré à
+accounts_profile_edit: Éditer le profil
+accounts_logout: Déconnexion
+accounts_profile: Profil
+accounts_registration: Enregistrement
+accounts_edit_profile: Éditer le profil
+accounts_login: Connexion
+accounts_state: État
+accounts_password: Mot de passe
+accounts_forgot_password: Mot de passe oublié?
+accounts_reset_password: Réinitialiser le mot de passe
+accounts_full_name: Nom complet
+accounts_new_password: Nouveau mot de passe
+accounts_cancel: Annuler
+accounts_save: Sauvegarder
+accounts_create_user: Créer un utilisateur
+accounts_reset: Réinitialiser
+accounts_message_wrong_username_password: "Nom d’utilisateur ou mot de passe incorrect"
+accounts_message_new_password_was_sended: "Un nouveau mot de passe a été envoyé"
