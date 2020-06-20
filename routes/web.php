@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Flextype;
 
-$app->group('/accounts', function () use ($app) : void {
+$app->group('/accounts', function () use ($app, $flextype) : void {
     $app->get('', 'AccountsController:index')->setName('accounts.index');
     $app->get('/login', 'AccountsController:login')->setName('accounts.login');
     $app->post('/login', 'AccountsController:loginProcess')->setName('accounts.loginProcess');
@@ -23,7 +23,7 @@ $app->group('/accounts', function () use ($app) : void {
     $app->get('/profile/{username}', 'AccountsController:profile')->setName('accounts.profile');
 })->add('csrf');
 
-$app->group('/accounts', function () use ($app) : void {
+$app->group('/accounts', function () use ($app, $flextype) : void {
     $app->post('/logout', 'AccountsController:logoutProcess')->setName('accounts.logoutProcess');
     $app->get('/profile/{username}/edit', 'AccountsController:profileEdit')->setName('accounts.profileEdit');
     $app->post('/profile/{username}/edit', 'AccountsController:profileEditProcess')->setName('accounts.profileEditProcess');

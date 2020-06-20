@@ -3,3 +3,10 @@ enabled: true
 
 # Accounts plugin priority
 priority: 80
+
+# From email
+from:
+  email: support@flextype.org
+
+registration:
+  default_roles: user

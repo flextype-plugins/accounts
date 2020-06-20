@@ -47,7 +47,6 @@ class AccountsController extends Container
         $accounts      = [];
 
         foreach ($accounts_list as $account) {
-
             if ($account['type'] !== 'dir' || ! Filesystem::has($account['path'] . '/' . 'profile.yaml')) {
                 continue;
             }
@@ -111,50 +110,14 @@ class AccountsController extends Container
                 return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $user_file['username']]));
             }
 
-            $this->flash->addMessage('error', __('admin_message_wrong_username_password'));
+            $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
 
             return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
-        $this->flash->addMessage('error', __('admin_message_wrong_username_password'));
+        $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
 
         return $response->withRedirect($this->router->pathFor('accounts.login'));
-    }
-
-    /**
-     * Registration page
-     *
-     * @param Request  $request  PSR7 request
-     * @param Response $response PSR7 response
-     * @param array    $args     Args
-     */
-    public function registration(Request $request, Response $response, array $args) : Response
-    {
-        if ($this->acl->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
-        }
-
-        $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
-        $plugin_template_path = 'plugins/accounts/templates/registration.html';
-        $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
-
-        return $this->twig->render($response, $template_path);
-    }
-
-    /**
-     * Reset passoword page
-     *
-     * @param Request  $request  PSR7 request
-     * @param Response $response PSR7 response
-     * @param array    $args     Args
-     */
-    public function resetPassword(Request $request, Response $response, array $args) : Response
-    {
-        $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
-        $plugin_template_path = 'plugins/accounts/templates/reset-password.html';
-        $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
-
-        return $this->twig->render($response, $template_path);
     }
 
     /**
@@ -171,6 +134,7 @@ class AccountsController extends Container
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
             if (password_verify(trim($args['hash']), $user_file_data['hashed_password_reset'])) {
+
                 // Generate new passoword
                 $raw_password    = bin2hex(random_bytes(16));
                 $hashed_password = password_hash($raw_password, PASSWORD_BCRYPT);
@@ -190,13 +154,13 @@ class AccountsController extends Container
                     $mail = new PHPMailer(true);
 
                     $theme_new_password_email_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/emails/new-password.md';
-                    $plugin_new_password_email_path = 'plugins/accounts/emails/new-password.md';
+                    $plugin_new_password_email_path = 'plugins/accounts/templates/emails/new-password.md';
                     $email_template_path            = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_new_password_email_path : $plugin_new_password_email_path;
 
                     $new_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                     //Recipients
-                    $mail->setFrom($new_password_email['from'], 'Mailer');
+                    $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
                     $mail->addAddress($user_file_data['email'], $username);
 
                     if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
@@ -206,10 +170,10 @@ class AccountsController extends Container
                     }
 
                     $tags = [
-                        '[sitename]' => $this->registry->get('plugins.site.settings.title'),
-                        '[username]' => $username,
-                        '[password]' => $raw_password,
-                        '[url]' => $url,
+                        '{sitename}' => $this->registry->get('plugins.site.settings.title'),
+                        '{username}' => $username,
+                        '{password}' => $raw_password,
+                        '{url}' => $url,
                     ];
 
                     $subject = $this->parser->parse($new_password_email['subject'], 'shortcodes');
@@ -223,8 +187,12 @@ class AccountsController extends Container
                     // Send email
                     $mail->send();
 
+                    $this->flash->addMessage('error', __('accounts_message_new_password_was_sended'));
+
                     return $response->withRedirect($this->router->pathFor('accounts.login'));
                 }
+
+                $this->flash->addMessage('error', __('accounts_message_new_password_was_sended'));
 
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
@@ -233,6 +201,22 @@ class AccountsController extends Container
         }
 
         return $response->withRedirect($this->router->pathFor('accounts.login'));
+    }
+
+    /**
+     * Reset passoword page
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function resetPassword(Request $request, Response $response, array $args) : Response
+    {
+        $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
+        $plugin_template_path = 'plugins/accounts/templates/reset-password.html';
+        $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path);
     }
 
     /**
@@ -256,7 +240,8 @@ class AccountsController extends Container
             Arr::delete($post_data, 'form-save-action');
             Arr::delete($post_data, 'username');
 
-            $post_data['hashed_password_reset'] = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT);
+            $raw_hash                           = bin2hex(random_bytes(16));
+            $post_data['hashed_password_reset'] = password_hash($raw_hash, PASSWORD_BCRYPT);
 
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
@@ -274,12 +259,12 @@ class AccountsController extends Container
 
                 $theme_reset_password_email_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/emails/reset-password.md';
                 $plugin_reset_password_email_path = 'plugins/accounts/templates/emails/reset-password.md';
-                $email_template_path              = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
+                $email_template_path              = Filesystem::has(PATH['project'] . '/' . $theme_reset_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
 
                 $reset_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
-                $mail->setFrom($reset_password_email['from'], 'Mailer');
+                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
                 $mail->addAddress($user_file_data['email'], $username);
 
                 if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
@@ -289,9 +274,10 @@ class AccountsController extends Container
                 }
 
                 $tags = [
-                    '[sitename]' => $this->registry->get('plugins.site.settings.title'),
-                    '[username]' => $username,
-                    '[url]' => $url,
+                    '{sitename}' => $this->registry->get('plugins.site.settings.title'),
+                    '{username}' => $username,
+                    '{url}' => $url,
+                    '{new_hash}' => $raw_hash,
                 ];
 
                 $subject = $this->parser->parse($reset_password_email['subject'], 'shortcodes');
@@ -312,6 +298,30 @@ class AccountsController extends Container
         }
 
         return $response->withRedirect($this->router->pathFor('accounts.registration'));
+    }
+
+    /**
+     * Registration page
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function registration(Request $request, Response $response, array $args) : Response
+    {
+        if ($this->registry->get('plugins.accounts.settings.registration.enabled') === false) {
+             return $response->withRedirect($this->router->pathFor('accounts.login'));
+        }
+
+        if ($this->acl->isUserLoggedIn()) {
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+        }
+
+        $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
+        $plugin_template_path = 'plugins/accounts/templates/registration.html';
+        $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path);
     }
 
     /**
@@ -345,7 +355,7 @@ class AccountsController extends Container
             $post_data['registered_at']   = $time;
             $post_data['uuid']            = $uuid;
             $post_data['hashed_password'] = $hashed_password;
-            $post_data['roles']           = 'user';
+            $post_data['roles']           = $this->registry->get('plugins.accounts.settings.registration.roles');
 
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
@@ -373,12 +383,12 @@ class AccountsController extends Container
                 $new_user_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
-                $mail->setFrom($new_user_email['from'], 'Mailer');
+                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
                 $mail->addAddress($post_data['email'], $username);
 
                 $tags = [
                     '[sitename]' => $this->registry->get('plugins.site.settings.title'),
-                    '[username]' => $this->acl->getUserLoggedInUsername(),
+                    '[username]' => $username,
                 ];
 
                 $subject = $this->parser->parse($new_user_email['subject'], 'shortcodes');

@@ -7,8 +7,6 @@
 ## Features
 
 * Built in predesigned and fully customizable pages: Accounts List, Login, Registration, Password Reset, Account Profile and Account Edit Profile.
-* Simple and Flexible ACL(Access Control List) for any entries or any specific data.
-* Built in Shortcodes and Twig functions to restrict access for specific users in the entries content and templates.  
 
 ## Dependencies
 
@@ -52,7 +50,9 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 |---|---|---|
 | enabled | true | true or false to disable the plugin |
 | priority | 80 | accounts plugin priority |
-| allow_registration | true | Allow user registration `true` or `false` |
+| from.email | support@flextype.org | From email |
+| registration.enabled | true | Allow user registration `true` or `false` |
+| registration.default_roles | user | Default roles for new users |
 
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
