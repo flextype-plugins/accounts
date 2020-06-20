@@ -112,6 +112,9 @@ class AccountsController extends Container
 
             $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
 
+            // Run event onAccountsUserLoggedIn
+            $this->emitter->emit('onAccountsUserLoggedIn');
+
             return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
@@ -193,6 +196,9 @@ class AccountsController extends Container
                 }
 
                 $this->flash->addMessage('error', __('accounts_message_new_password_was_sended'));
+
+                // Run event onAccountsNewPasswordSended
+                $this->emitter->emit('onAccountsNewPasswordSended');
 
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
@@ -290,6 +296,9 @@ class AccountsController extends Container
 
                 // Send email
                 $mail->send();
+
+                // Run event onAccountsPasswordReset
+                $this->emitter->emit('onAccountsPasswordReset');
 
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
@@ -403,6 +412,9 @@ class AccountsController extends Container
                 // Send email
                 $mail->send();
 
+                // Run event onAccountsNewUserRegistered
+                $this->emitter->emit('onAccountsNewUserRegistered');
+
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
 
@@ -506,7 +518,11 @@ class AccountsController extends Container
                     'yaml'
                 )
             )) {
-                return $response->withRedirect($this->router->pathFor('accounts.login'));
+
+                // Run event onAccountsProfileEdited
+                $this->emitter->emit('onAccountsProfileEdited');
+
+                return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
             }
 
             return $response->withRedirect($this->router->pathFor('accounts.registration'));
@@ -524,6 +540,9 @@ class AccountsController extends Container
     public function logoutProcess(Request $request, Response $response) : Response
     {
         Session::destroy();
+
+        // Run event onAccountsLogout
+        $this->emitter->emit('onAccountsLogout');
 
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }

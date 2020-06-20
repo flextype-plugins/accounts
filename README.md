@@ -54,6 +54,17 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | registration.enabled | true | Allow user registration `true` or `false` |
 | registration.default_roles | user | Default roles for new users |
 
+### Events
+
+| Event | Description |
+|---|---|
+| onAccountsUserLoggedIn | Allows plugins to include their own logic when user logs in. |
+| onAccountsNewPasswordSended | Allows plugins to include their own logic when new password was sended. |
+| onAccountsPasswordReset | Allows plugins to include their own logic when password was reset. |
+| onAccountsNewUserRegistered | Allows plugins to include their own logic when new was user registered. |
+| onAccountsProfileEdited | Allows plugins to include their own logic when user profile edited. |
+| onAccountsLogout | Allows plugins to include their own logic when user logs out. |
+
 ## LICENSE
 [The MIT License (MIT)](https://github.com/flextype-plugins/accounts/blob/master/LICENSE.txt)
 Copyright (c) 2020 [Sergey Romanenko](https://github.com/Awilum)
