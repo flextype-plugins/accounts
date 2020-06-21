@@ -1,25 +1,25 @@
 ---
-accounts: Accounts
-accounts_title: Title
-accounts_description: description
-accounts_username: Username
-accounts_email: Email
-accounts_registered_at: Registered at
-accounts_profile_edit: Edit profile
-accounts_logout: Logout
-accounts_profile: Profile
-accounts_registration: Registration
-accounts_edit_profile: Edit profile
-accounts_login: Login
-accounts_state: State
-accounts_password: Password
-accounts_forgot_password: Forgot Password ?
-accounts_reset_password: Reset Password
-accounts_full_name: Full name
-accounts_new_password: New Password
-accounts_cancel: Cancel
-accounts_save: Save
-accounts_create_user: Create User
-accounts_reset: Reset
-accounts_message_wrong_username_password: "Wrong username or password"
-accounts_message_new_password_was_sended: "New password was sended"
+accounts: Учетные записи
+accounts_title: Заголовок
+accounts_description: описание
+accounts_username: Имя пользователя
+accounts_email: E-mail
+accounts_registered_at: Дата регистрации
+accounts_profile_edit: Изменить профиль
+accounts_logout: Выход
+accounts_profile: Профиль
+accounts_registration: Регистрация
+accounts_edit_profile: Редактировать профиль
+accounts_login: Войти
+accounts_state: Состояние
+accounts_password: Пароль
+accounts_forgot_password: Забыли пароль?
+accounts_reset_password: Восстановить пароль
+accounts_full_name: Полное имя
+accounts_new_password: Новый пароль
+accounts_cancel: Отмена
+accounts_save: Сохранить
+accounts_create_user: Создать пользователя
+accounts_reset: Сбросить
+accounts_message_wrong_username_password: "Неверное имя пользователя или пароль"
+accounts_message_new_password_was_sended: "Новый пароль был отправлен"
