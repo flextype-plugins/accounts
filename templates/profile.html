@@ -1,0 +1,23 @@
+{% extends 'themes/' ~ registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+
+{% block content %}
+    <h3>{{ __('accounts_profile') }}</h3>
+
+    <table>
+        {% for key, value in profile %}
+        <tr>
+            <td>
+                {{ __('accounts_' ~ key) }}: {{ value }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    {% if acl.getUserLoggedInUsername() == profile.username %}
+        <a href="{{ path_for('accounts.profileEdit', {'username': profile.username}) }}">{{ __('accounts_profile_edit') }}</a>
+        <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ __('accounts_logout') }}</a>
+        <form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
+            {{ csrf() }}
+        </form>
+    {% endif %}
+{% endblock %}

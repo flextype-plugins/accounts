@@ -1,0 +1,25 @@
+---
+accounts: Учетные записи
+accounts_title: Заголовок
+accounts_description: описание
+accounts_username: Имя пользователя
+accounts_email: E-mail
+accounts_registered_at: Дата регистрации
+accounts_profile_edit: Изменить профиль
+accounts_logout: Выход
+accounts_profile: Профиль
+accounts_registration: Регистрация
+accounts_edit_profile: Редактировать профиль
+accounts_login: Войти
+accounts_state: Состояние
+accounts_password: Пароль
+accounts_forgot_password: Забыли пароль?
+accounts_reset_password: Восстановить пароль
+accounts_full_name: Полное имя
+accounts_new_password: Новый пароль
+accounts_cancel: Отмена
+accounts_save: Сохранить
+accounts_create_user: Создать пользователя
+accounts_reset: Сбросить
+accounts_message_wrong_username_password: "Неверное имя пользователя или пароль"
+accounts_message_new_password_was_sended: "Новый пароль был отправлен"

@@ -1,0 +1,23 @@
+{% extends 'themes/' ~ registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+
+{% block content %}
+
+<h3>{{ __('accounts') }}</h3>
+
+<table>
+    <thead>
+      <tr>
+        <th>Username</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
+      <tr>
+        <td><a href="{{ path_for('accounts.profile', {'username':  account.username}) }}">{{ account.username }}</a></td>
+        <td>{{ account.registered_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

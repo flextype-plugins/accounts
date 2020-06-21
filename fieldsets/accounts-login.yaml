@@ -1,0 +1,23 @@
+title: Login
+default_field: title
+icon: fas fa-user
+size: 4/12
+hide: true
+form:
+  buttons:
+    submit:
+      type: submit
+      title: accounts_login
+    forgot_password:
+      type: link
+      title: accounts_forgot_password
+      href: ./reset-password
+  fields:
+    username:
+      title: accounts_username
+      type: text
+      size: 12
+    password:
+      title: accounts_password
+      type: password
+      size: 12

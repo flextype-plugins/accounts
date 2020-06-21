@@ -1,0 +1,32 @@
+title: Registration
+default_field: title
+icon: fas fa-user
+size: 4/12
+hide: true
+form:
+  name: registration
+  buttons:
+    submit:
+      type: submit
+      title: accounts_create_user
+  fields:
+    username:
+      title: accounts_username
+      type: text
+      size: 12
+      validation:
+        required: true
+        pattern: '^[a-z0-9_-]{3,16}$'
+    password:
+      title: accounts_password
+      type: password
+      size: 12
+      validation:
+        required: true
+        pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+    email:
+      title: accounts_email
+      type: email
+      size: 12
+      validation:
+        required: false

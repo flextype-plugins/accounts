@@ -1,0 +1,49 @@
+# enabled: true or false to disable the plugin
+enabled: true
+
+# Accounts plugin priority
+priority: 80
+
+# From email
+from:
+  name: Flextype
+  email: support@flextype.org
+
+# Registraton
+registration:
+  enabled: true
+  default_roles: user
+  default_state: enabled
+  redirect:
+    route:
+      name: accounts.login
+
+# Login
+login:
+  redirect:
+    route:
+      name: accounts.profile
+
+# Profile Edit
+profile_edit:
+  redirect:
+    route:
+      name: accounts.profile
+
+# New Password
+new_password:
+  redirect:
+    route:
+      name: accounts.login
+
+# Reset Password
+reset_password:
+  redirect:
+    route:
+      name: accounts.login
+
+# Logout
+logout:
+  redirect:
+    route:
+      name: accounts.login

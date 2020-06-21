@@ -1,0 +1,29 @@
+title: Profile
+default_field: title
+icon: fas fa-user
+hide: true
+size: 4/12
+form:
+  buttons:
+    submit:
+      type: submit
+      title: accounts_save
+    back:
+      type: button
+      title: accounts_cancel
+      href: './'
+  fields:
+    email:
+      title: accounts_email
+      type: email
+      size: 12
+      validation:
+        required: true
+    full_name:
+      title: accounts_full_name
+      type: text
+      size: 12
+    new_password:
+      title: accounts_new_password
+      type: password
+      size: 12

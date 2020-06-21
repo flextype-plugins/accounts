@@ -1,0 +1,34 @@
+{
+    "name": "flextype-plugins/accounts",
+    "type": "project",
+    "description": "Accounts for Flextype.",
+    "keywords": ["accounts", "plugin", "flextype", "php", "html"],
+    "homepage": "https://github.com/flextype-plugins/accounts",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Romanenko",
+            "email": "support@flextype.org",
+            "homepage": "https://flextype.org"
+        }
+    ],
+    "support": {
+      "issues": "https://github.com/flextype-plugins/accounts/issues"
+    },
+    "require": {
+        "php": ">=7.2.0",
+        "ext-json": "*"
+    },
+    "config": {
+        "apcu-autoloader": true,
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.2.0"
+        }
+    },
+    "autoload": {
+        "classmap": [
+            "app"
+        ]
+    }
+}
