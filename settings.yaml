@@ -14,7 +14,8 @@ registration:
   default_roles: user
   default_state: enabled
   redirect:
-    route_name: accounts.login
+    route:
+      name: accounts.login
 
 # Login
 login:

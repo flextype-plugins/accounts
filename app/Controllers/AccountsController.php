@@ -146,7 +146,9 @@ class AccountsController extends Container
      */
     public function newPasswordProcess(Request $request, Response $response, array $args) : Response
     {
-        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml')) {
+        $username = $args['username'];
+
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
@@ -421,8 +423,8 @@ class AccountsController extends Container
                 $mail->addAddress($post_data['email'], $username);
 
                 $tags = [
-                    '[sitename]' => $this->registry->get('plugins.site.settings.title'),
-                    '[username]' => $username,
+                    '{sitename}' => $this->registry->get('plugins.site.settings.title'),
+                    '{username}' => $username,
                 ];
 
                 $subject = $this->parser->parse($new_user_email['subject'], 'shortcodes');
@@ -560,18 +562,18 @@ class AccountsController extends Container
                 $this->emitter->emit('onAccountsProfileEdited');
 
                 // Add redirect to route name or to specific link
-                if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route')) {
-                    if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name') == 'accounts.profile') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route')) {
+                    if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name') == 'accounts.profile') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
                     }
 
-                    if ($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name') == 'accounts.profileEdit') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                    if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name') == 'accounts.profileEdit') {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
                     }
 
-                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.edit_profile.redirect.route.name')));
+                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name')));
                 } else {
-                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.edit_profile.redirect.link'));
+                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.profile_edit.redirect.link'));
                 }
             }
 
