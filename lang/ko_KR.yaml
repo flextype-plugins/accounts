@@ -1,25 +1,25 @@
 ---
-accounts: Accounts
-accounts_title: Title
-accounts_description: description
-accounts_username: Username
-accounts_email: Email
-accounts_registered_at: Registered at
-accounts_profile_edit: Edit profile
-accounts_logout: Logout
-accounts_profile: Profile
-accounts_registration: Registration
-accounts_edit_profile: Edit profile
-accounts_login: Login
-accounts_state: State
-accounts_password: Password
-accounts_forgot_password: Forgot Password ?
-accounts_reset_password: Reset Password
-accounts_full_name: Full name
-accounts_new_password: New Password
-accounts_cancel: Cancel
-accounts_save: Save
-accounts_create_user: Create User
-accounts_reset: Reset
-accounts_message_wrong_username_password: "Wrong username or password"
-accounts_message_new_password_was_sended: "New password was sended"
+accounts: 계정
+accounts_title: 제목
+accounts_description: 설명
+accounts_username: 사용자명
+accounts_email: 이메일
+accounts_registered_at: 등록 날짜
+accounts_profile_edit: 프로필 수정
+accounts_logout: 로그아웃
+accounts_profile: 프로필
+accounts_registration: 등록
+accounts_edit_profile: 프로필 편집
+accounts_login: 로그인
+accounts_state: 주
+accounts_password: 비밀번호
+accounts_forgot_password: 비밀번호를 잊으셨나요?
+accounts_reset_password: 비밀번호 재설정
+accounts_full_name: 성을 포함한 이름
+accounts_new_password: 새 비밀번호
+accounts_cancel: 취소
+accounts_save: 저장
+accounts_create_user: 사용자 새로 만들기
+accounts_reset: 초기화
+accounts_message_wrong_username_password: "잘못된 사용자 이름 또는 비밀번호"
+accounts_message_new_password_was_sended: "새로운 비밀번호가 보내졌습니다"
