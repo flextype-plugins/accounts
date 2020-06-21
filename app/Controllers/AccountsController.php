@@ -472,6 +472,11 @@ class AccountsController extends Container
      */
     public function profile(Request $request, Response $response, array $args) : Response
     {
+        // Redirect to accounts index if profile not founded
+        if (!Filesystem::has(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml')) {
+            return $response->withRedirect($this->router->pathFor('accounts.index'));
+        }
+
         $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
 
         Arr::delete($profile, 'uuid');
@@ -499,6 +504,11 @@ class AccountsController extends Container
      */
     public function profileEdit(Request $request, Response $response, array $args) : Response
     {
+        // Redirect to accounts index if profile not founded
+        if (!Filesystem::has(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml')) {
+            return $response->withRedirect($this->router->pathFor('accounts.index'));
+        }
+
         $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';

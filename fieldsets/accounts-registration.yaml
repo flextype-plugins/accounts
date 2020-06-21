@@ -1,6 +1,6 @@
 title: Registration
 default_field: title
-icon: fas fa-users
+icon: fas fa-user
 size: 4/12
 hide: true
 form:

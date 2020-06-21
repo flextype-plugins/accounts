@@ -1,6 +1,6 @@
 title: Profile
 default_field: title
-icon: fas fa-users
+icon: fas fa-user
 hide: true
 size: 4/12
 form:
