@@ -6,6 +6,7 @@ priority: 80
 
 # From email
 from:
+  name: Flextype
   email: support@flextype.org
 
 # Registraton

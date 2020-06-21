@@ -1,11 +1,11 @@
 ---
 subject: Welcome to {sitename}!
 ---
-Welcome to {sitename}!
+Welcome to {sitename}!<br><br>
 
-Dear {username},
+Dear {username},<br><br>
 
-Thanks for registering at {sitename}!<br> We are glad you have chosen to be a part of our community and we hope you enjoy your stay.
+Thanks for registering at {sitename}!<br> We are glad you have chosen to be a part of our community and we hope you enjoy your stay.<br><br>
 
-All the best,
+All the best,<br>
 {sitename}

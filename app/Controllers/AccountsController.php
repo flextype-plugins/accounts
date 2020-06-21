@@ -179,7 +179,7 @@ class AccountsController extends Container
                     $new_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                     //Recipients
-                    $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
+                    $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
                     $mail->addAddress($user_file_data['email'], $username);
 
                     if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
@@ -206,24 +206,20 @@ class AccountsController extends Container
                     // Send email
                     $mail->send();
 
-                    $this->flash->addMessage('error', __('accounts_message_new_password_was_sended'));
+                    $this->flash->addMessage('success', __('accounts_message_new_password_was_sended'));
 
-                    return $response->withRedirect($this->router->pathFor('accounts.login'));
+                    // Run event onAccountsNewPasswordSended
+                    $this->emitter->emit('onAccountsNewPasswordSended');
+
+                    // Add redirect to route name or to specific link
+                    if ($this->registry->get('plugins.accounts.settings.new_password.redirect.route')) {
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.new_password.redirect.route.name')));
+                    } else {
+                        return $response->withRedirect($this->registry->get('plugins.accounts.settings.new_password.redirect.link'));
+                    }
                 }
-
-                $this->flash->addMessage('error', __('accounts_message_new_password_was_sended'));
-
-                // Run event onAccountsNewPasswordSended
-                $this->emitter->emit('onAccountsNewPasswordSended');
-
-                // Add redirect to route name or to specific link
-                if ($this->registry->get('plugins.accounts.settings.new_password.redirect.route')) {
-                    return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.new_password.redirect.route.name')));
-                } else {
-                    return $response->withRedirect($this->registry->get('plugins.accounts.settings.new_password.redirect.link'));
-                }
+                return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
-
             return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
@@ -291,7 +287,7 @@ class AccountsController extends Container
                 $reset_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
-                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
+                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
                 $mail->addAddress($user_file_data['email'], $username);
 
                 if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
@@ -419,7 +415,7 @@ class AccountsController extends Container
                 $new_user_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
 
                 //Recipients
-                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.site.settings.title'));
+                $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
                 $mail->addAddress($post_data['email'], $username);
 
                 $tags = [
@@ -612,7 +608,5 @@ class AccountsController extends Container
         } else {
             return $response->withRedirect($this->registry->get('plugins.accounts.settings.logout.redirect.link'));
         }
-
-
     }
 }
