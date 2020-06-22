@@ -1,5 +1,5 @@
 name: Accounts
-version: 1.0.0
+version: 1.0.1
 description: Accounts plugins for Flextype.
 icon: fas fa-users
 author:
@@ -15,3 +15,4 @@ dependencies:
   site: '>=1.0.0'
   twig: '>=1.0.0'
   acl: '>=1.0.0'
+  phpmailer: '>=1.0.0'
