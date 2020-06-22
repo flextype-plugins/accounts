@@ -76,7 +76,7 @@ class AccountsController extends Container
     public function login(Request $request, Response $response, array $args) : Response
     {
         if ($this->acl->isUserLoggedIn()) {
-            //return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
