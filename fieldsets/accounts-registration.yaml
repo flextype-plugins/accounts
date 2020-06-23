@@ -10,13 +10,13 @@ form:
       type: submit
       title: accounts_create_user
   fields:
-    username:
-      title: accounts_username
-      type: text
+    email:
+      title: accounts_email
+      type: email
       size: 12
       validation:
         required: true
-        pattern: '^[a-z0-9_-]{3,16}$'
+        pattern: '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$'
     password:
       title: accounts_password
       type: password
@@ -24,9 +24,3 @@ form:
       validation:
         required: true
         pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
-    email:
-      title: accounts_email
-      type: email
-      size: 12
-      validation:
-        required: false

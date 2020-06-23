@@ -51,12 +51,16 @@ class AccountsController extends Container
                 continue;
             }
 
-            $account = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+            $account_to_store = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+
+            $_path = explode('/', $account['path']);
+            $account_to_store['email'] = array_pop($_path);
 
             Arr::delete($account, 'hashed_password');
             Arr::delete($account, 'hashed_password_reset');
 
-            $accounts[] = $account;
+
+            $accounts[] = $account_to_store;
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/index.html';
@@ -76,7 +80,7 @@ class AccountsController extends Container
     public function login(Request $request, Response $response, array $args) : Response
     {
         if ($this->acl->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => $this->acl->getUserLoggedInUsername()]));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['email' => $this->acl->getUserLoggedInEmail()]));
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/login.html';
@@ -98,14 +102,18 @@ class AccountsController extends Container
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
-        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $post_data['username'] . '/profile.yaml')) {
+        $email = $post_data['email'];
+
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
+
             $user_file = $this->serializer->decode(Filesystem::read($_user_file), 'yaml', false);
 
             if (password_verify(trim($post_data['password']), $user_file['hashed_password'])) {
-                Session::set('account_username', $user_file['username']);
-                Session::set('account_roles', $user_file['roles']);
-                Session::set('account_uuid', $user_file['uuid']);
-                Session::set('account_is_user_logged_in', true);
+
+                $this->acl->setUserLoggedInEmail($email);
+                $this->acl->setUserLoggedInRoles($user_file['roles']);
+                $this->acl->setUserLoggedInUuid($user_file['uuid']);
+                $this->acl->setUserLoggedIn(true);
 
                 // Run event onAccountsUserLoggedIn
                 $this->emitter->emit('onAccountsUserLoggedIn');
@@ -113,11 +121,11 @@ class AccountsController extends Container
                 // Add redirect to route name or to specific link
                 if ($this->registry->get('plugins.accounts.settings.login.redirect.route')) {
                     if ($this->registry->get('plugins.accounts.settings.login.redirect.route.name') == 'accounts.profile') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['username' => $user_file['username']]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['email' => $email]));
                     }
 
                     if ($this->registry->get('plugins.accounts.settings.login.redirect.route.name') == 'accounts.profileEdit') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['username' => $user_file['username']]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name'), ['email' => $email]));
                     }
 
                     return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.login.redirect.route.name')));
@@ -146,9 +154,9 @@ class AccountsController extends Container
      */
     public function newPasswordProcess(Request $request, Response $response, array $args) : Response
     {
-        $username = $args['username'];
+        $email = $args['email'];
 
-        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
@@ -163,7 +171,7 @@ class AccountsController extends Container
                 Arr::delete($user_file_data, 'hashed_password_reset');
 
                 if (Filesystem::write(
-                    PATH['project'] . '/accounts/' . $username . '/profile.yaml',
+                    PATH['project'] . '/accounts/' . $email . '/profile.yaml',
                     $this->serializer->encode(
                         $user_file_data,
                         'yaml'
@@ -180,7 +188,7 @@ class AccountsController extends Container
 
                     //Recipients
                     $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
-                    $mail->addAddress($user_file_data['email'], $username);
+                    $mail->addAddress($email, $email);
 
                     if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
                         $url = $this->registry->get('flextype.settings.url');
@@ -188,9 +196,16 @@ class AccountsController extends Container
                         $url = Uri::createFromEnvironment(new Environment($_SERVER))->getBaseUrl();
                     }
 
+                    if (isset($user_file_data['full_name'])) {
+                        $user = $user_file_data['full_name'];
+                    } else {
+                        $user = $email;
+                    }
+
                     $tags = [
                         '{sitename}' => $this->registry->get('plugins.site.settings.title'),
-                        '{username}' => $username,
+                        '{email}' => $email,
+                        '{user}' => $user,
                         '{password}' => $raw_password,
                         '{url}' => $url,
                     ];
@@ -254,14 +269,14 @@ class AccountsController extends Container
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
-        // Get username
-        $username = $post_data['username'];
+        // Get email
+        $email = $post_data['email'];
 
-        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
+        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'form-save-action');
-            Arr::delete($post_data, 'username');
+            Arr::delete($post_data, 'email');
 
             $raw_hash                           = bin2hex(random_bytes(16));
             $post_data['hashed_password_reset'] = password_hash($raw_hash, PASSWORD_BCRYPT);
@@ -271,7 +286,7 @@ class AccountsController extends Container
 
             // Create account
             if (Filesystem::write(
-                PATH['project'] . '/accounts/' . $username . '/profile.yaml',
+                PATH['project'] . '/accounts/' . $email . '/profile.yaml',
                 $this->serializer->encode(
                     array_merge($user_file_data, $post_data),
                     'yaml'
@@ -288,7 +303,7 @@ class AccountsController extends Container
 
                 //Recipients
                 $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
-                $mail->addAddress($user_file_data['email'], $username);
+                $mail->addAddress($user_file_data['email'], $email);
 
                 if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
                     $url = $this->registry->get('flextype.settings.url');
@@ -296,9 +311,16 @@ class AccountsController extends Container
                     $url = Uri::createFromEnvironment(new Environment($_SERVER))->getBaseUrl();
                 }
 
+                if (isset($user_file_data['full_name'])) {
+                    $user = $user_file_data['full_name'];
+                } else {
+                    $user = $email;
+                }
+
                 $tags = [
                     '{sitename}' => $this->registry->get('plugins.site.settings.title'),
-                    '{username}' => $username,
+                    '{email}' => $email,
+                    '{user}' => $user,
                     '{url}' => $url,
                     '{new_hash}' => $raw_hash,
                 ];
@@ -345,7 +367,7 @@ class AccountsController extends Container
         }
 
         if ($this->acl->isUserLoggedIn()) {
-            return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+            return $response->withRedirect($this->router->pathFor('accounts.profile', ['email' => $this->acl->getUserLoggedInEmail()]));
         }
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
@@ -367,41 +389,43 @@ class AccountsController extends Container
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
-        $username = $this->slugify->slugify($post_data['username']);
+        // Get user email
+        $email = $post_data['email'];
 
-        if (! Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
+        if (! Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
+
             // Generate UUID
             $uuid = Uuid::uuid4()->toString();
 
             // Get time
             $time = date($this->registry->get('flextype.settings.date_format'), time());
 
-            // Get username
-            $username = $this->slugify->slugify($post_data['username']);
-
             // Get hashed password
             $hashed_password = password_hash($post_data['password'], PASSWORD_BCRYPT);
 
-            $post_data['username']        = $username;
-            $post_data['registered_at']   = $time;
-            $post_data['uuid']            = $uuid;
-            $post_data['hashed_password'] = $hashed_password;
-            $post_data['roles']           = $this->registry->get('plugins.accounts.settings.registration.default_roles');
-            $post_data['state']           = $this->registry->get('plugins.accounts.settings.registration.default_state');
+            // Data
+            $data = [];
+            $data['registered_at']   = $time;
+            $data['uuid']            = $uuid;
+            $data['hashed_password'] = $hashed_password;
+            $data['roles']           = $this->registry->get('plugins.accounts.settings.registration.default_roles');
+            $data['state']           = $this->registry->get('plugins.accounts.settings.registration.default_state');
 
+            // Delete fields from POST DATA
+            Arr::delete($post_data, 'email');
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'password');
             Arr::delete($post_data, 'form-save-action');
 
             // Create accounts directory and account
-            Filesystem::createDir(PATH['project'] . '/accounts/' . $this->slugify->slugify($post_data['username']));
+            Filesystem::createDir(PATH['project'] . '/accounts/' . $email);
 
             // Create admin account
             if (Filesystem::write(
-                PATH['project'] . '/accounts/' . $username . '/profile.yaml',
+                PATH['project'] . '/accounts/' . $email . '/profile.yaml',
                 $this->serializer->encode(
-                    $post_data,
+                    array_merge($post_data, $data),
                     'yaml'
                 )
             )) {
@@ -416,11 +440,17 @@ class AccountsController extends Container
 
                 //Recipients
                 $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
-                $mail->addAddress($post_data['email'], $username);
+                $mail->addAddress($email, $email);
+
+                if (isset($post_data['full_name'])) {
+                    $user = $post_data['full_name'];
+                } else {
+                    $user = $email;
+                }
 
                 $tags = [
                     '{sitename}' => $this->registry->get('plugins.site.settings.title'),
-                    '{username}' => $username,
+                    '{user}'    => $user,
                 ];
 
                 $subject = $this->parser->parse($new_user_email['subject'], 'shortcodes');
@@ -440,11 +470,11 @@ class AccountsController extends Container
                 // Add redirect to route name or to specific link
                 if ($this->registry->get('plugins.accounts.settings.registration.redirect.route')) {
                     if ($this->registry->get('plugins.accounts.settings.registration.redirect.route.name') == 'accounts.profile') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['username' => $user_file['username']]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['email' => $user_file['email']]));
                     }
 
                     if ($this->registry->get('plugins.accounts.settings.registration.redirect.route.name') == 'accounts.profileEdit') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['username' => $user_file['username']]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name'), ['email' => $user_file['email']]));
                     }
 
                     return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.registration.redirect.route.name')));
@@ -468,12 +498,15 @@ class AccountsController extends Container
      */
     public function profile(Request $request, Response $response, array $args) : Response
     {
+        $email = $args['email'];
+
         // Redirect to accounts index if profile not founded
-        if (!Filesystem::has(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml')) {
+        if (!Filesystem::has(PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             return $response->withRedirect($this->router->pathFor('accounts.index'));
         }
 
-        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
+        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'), 'yaml');
+        $profile['email'] = $email;
 
         Arr::delete($profile, 'uuid');
         Arr::delete($profile, 'hashed_password');
@@ -500,18 +533,22 @@ class AccountsController extends Container
      */
     public function profileEdit(Request $request, Response $response, array $args) : Response
     {
+        $email = $args['email'];
+
         // Redirect to accounts index if profile not founded
-        if (!Filesystem::has(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml')) {
+        if (!Filesystem::has(PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             return $response->withRedirect($this->router->pathFor('accounts.index'));
         }
 
-        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $args['username'] . '/profile.yaml'), 'yaml');
+        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'), 'yaml');
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
         $plugin_template_path = 'plugins/accounts/templates/profile-edit.html';
         $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
 
-        if ($profile['username'] === Session::get('account_username')) {
+        $profile['email'] = $email;
+
+        if ($email === $this->acl->getUserLoggedInEmail()) {
             Arr::delete($profile, 'uuid');
             Arr::delete($profile, 'hashed_password');
             Arr::delete($profile, 'roles');
@@ -519,7 +556,7 @@ class AccountsController extends Container
             return $this->twig->render($response, $template_path, ['profile' => $profile]);
         }
 
-        return $response->withRedirect($this->router->pathFor('accounts.profile', ['username' => Session::get('account_username')]));
+        return $response->withRedirect($this->router->pathFor('accounts.profile', ['email' => $this->acl->getUserLoggedInEmail()]));
     }
 
     /**
@@ -534,15 +571,21 @@ class AccountsController extends Container
         // Get Data from POST
         $post_data = $request->getParsedBody();
 
-        // Get username
-        $username = $args['username'];
+        // Get email
+        $email = $args['email'];
 
-        if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $username . '/profile.yaml')) {
+        // Set current user profile path
+        $current_user_profile_path = PATH['project'] . '/accounts/' . $email . '/profile.yaml';
+
+        // Set user profile path
+        $user_profile_path = $current_user_profile_path;
+
+        if (Filesystem::has($user_profile_path)) {
             Arr::delete($post_data, 'csrf_name');
             Arr::delete($post_data, 'csrf_value');
             Arr::delete($post_data, 'form-save-action');
             Arr::delete($post_data, 'password');
-            Arr::delete($post_data, 'username');
+            Arr::delete($post_data, 'email');
 
             if (! empty($post_data['new_password'])) {
                 $post_data['hashed_password'] = password_hash($post_data['new_password'], PASSWORD_BCRYPT);
@@ -552,12 +595,12 @@ class AccountsController extends Container
                 Arr::delete($post_data, 'new_password');
             }
 
-            $user_file_body = Filesystem::read($_user_file);
+            $user_file_body = Filesystem::read($user_profile_path);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
             // Create admin account
             if (Filesystem::write(
-                PATH['project'] . '/accounts/' . $username . '/profile.yaml',
+                $user_profile_path,
                 $this->serializer->encode(
                     array_merge($user_file_data, $post_data),
                     'yaml'
@@ -570,11 +613,11 @@ class AccountsController extends Container
                 // Add redirect to route name or to specific link
                 if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route')) {
                     if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name') == 'accounts.profile') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['email' => $this->acl->getUserLoggedInEmail()]));
                     }
 
                     if ($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name') == 'accounts.profileEdit') {
-                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['username' => $this->acl->getUserLoggedInUsername()]));
+                        return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name'), ['email' => $this->acl->getUserLoggedInEmail()]));
                     }
 
                     return $response->withRedirect($this->router->pathFor($this->registry->get('plugins.accounts.settings.profile_edit.redirect.route.name')));

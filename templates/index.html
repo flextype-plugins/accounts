@@ -4,20 +4,20 @@
 
 <h3>{{ __('accounts') }}</h3>
 
-<table>
+<table style="width: 100%">
     <thead>
       <tr>
-        <th>Username</th>
+        <th align="left">{{ __('accounts_email') }}</th>
+        <th align="left">{{ __('accounts_registered_at') }}</th>
       </tr>
     </thead>
     <tbody>
       {% for account in accounts %}
       <tr>
-        <td><a href="{{ path_for('accounts.profile', {'username':  account.username}) }}">{{ account.username }}</a></td>
+        <td><a href="{{ path_for('accounts.profile', {'email':  account.email}) }}">{{ account.email }}</a></td>
         <td>{{ account.registered_at }}</td>
       </tr>
       {% endfor %}
     </tbody>
 </table>
-
 {% endblock %}

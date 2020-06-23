@@ -13,9 +13,9 @@ form:
       title: accounts_forgot_password
       href: ./reset-password
   fields:
-    username:
-      title: accounts_username
-      type: text
+    email:
+      title: accounts_email
+      type: email
       size: 12
     password:
       title: accounts_password

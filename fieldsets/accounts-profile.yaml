@@ -13,12 +13,6 @@ form:
       title: accounts_cancel
       href: './'
   fields:
-    email:
-      title: accounts_email
-      type: email
-      size: 12
-      validation:
-        required: true
     full_name:
       title: accounts_full_name
       type: text
