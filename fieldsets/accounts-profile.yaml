@@ -4,6 +4,10 @@ icon: fas fa-user
 hide: true
 size: 4/12
 form:
+  name: profile
+  messages:
+    success: true
+    error: true
   buttons:
     submit:
       type: submit
@@ -13,12 +17,6 @@ form:
       title: accounts_cancel
       href: './'
   fields:
-    email:
-      title: accounts_email
-      type: email
-      size: 12
-      validation:
-        required: true
     full_name:
       title: accounts_full_name
       type: text

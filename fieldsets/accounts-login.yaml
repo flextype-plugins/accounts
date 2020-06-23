@@ -4,6 +4,10 @@ icon: fas fa-user
 size: 4/12
 hide: true
 form:
+  name: login
+  messages:
+    success: true
+    error: true
   buttons:
     submit:
       type: submit
@@ -13,9 +17,9 @@ form:
       title: accounts_forgot_password
       href: ./reset-password
   fields:
-    username:
-      title: accounts_username
-      type: text
+    email:
+      title: accounts_email
+      type: email
       size: 12
     password:
       title: accounts_password
