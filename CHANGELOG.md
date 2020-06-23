@@ -1,3 +1,9 @@
+<a name="1.1.1"></a>
+# [1.1.1](https://github.com/flextype-plugins/accounts) (2020-06-23)
+
+### Bug Fixes
+* **lang**: fix translates
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/flextype-plugins/accounts) (2020-06-23)
 
