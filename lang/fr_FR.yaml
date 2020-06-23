@@ -23,3 +23,4 @@ accounts_create_user: Créer un utilisateur
 accounts_reset: Réinitialiser
 accounts_message_wrong_username_password: "Nom d’utilisateur ou mot de passe incorrect"
 accounts_message_new_password_was_sended: "Un nouveau mot de passe a été envoyé"
+accounts_message_hashed_password_reset_not_valid: "\"Hash for password reset is not valid"
