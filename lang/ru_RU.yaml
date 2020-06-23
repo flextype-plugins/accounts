@@ -23,4 +23,4 @@ accounts_create_user: Создать пользователя
 accounts_reset: Сбросить
 accounts_message_wrong_username_password: "Неверное имя пользователя или пароль"
 accounts_message_new_password_was_sended: "Новый пароль был отправлен"
-accounts_message_hashed_password_reset_not_valid: "\"Hash for password reset is not valid"
+accounts_message_hashed_password_reset_not_valid: "Hash for password reset is not valid"
