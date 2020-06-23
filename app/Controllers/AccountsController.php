@@ -160,6 +160,11 @@ class AccountsController extends Container
             $user_file_body = Filesystem::read($_user_file);
             $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
 
+            if (is_null($user_file_data['hashed_password_reset'])) {
+                $this->flash->addMessage('error', __('accounts_message_hashed_password_reset_not_valid'));
+                return $response->withRedirect($this->router->pathFor('accounts.login'));
+            }
+
             if (password_verify(trim($args['hash']), $user_file_data['hashed_password_reset'])) {
 
                 // Generate new passoword
@@ -235,6 +240,9 @@ class AccountsController extends Container
                 }
                 return $response->withRedirect($this->router->pathFor('accounts.login'));
             }
+
+            $this->flash->addMessage('error', __('accounts_message_hashed_password_reset_not_valid'));
+
             return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
@@ -303,7 +311,7 @@ class AccountsController extends Container
 
                 //Recipients
                 $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
-                $mail->addAddress($user_file_data['email'], $email);
+                $mail->addAddress($email, $email);
 
                 if ($this->registry->has('flextype.settings.url') && $this->registry->get('flextype.settings.url') !== '') {
                     $url = $this->registry->get('flextype.settings.url');
@@ -347,10 +355,10 @@ class AccountsController extends Container
                 }
             }
 
-            return $response->withRedirect($this->router->pathFor('accounts.registration'));
+            return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
-        return $response->withRedirect($this->router->pathFor('accounts.registration'));
+        return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
 
     /**

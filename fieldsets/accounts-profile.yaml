@@ -4,6 +4,10 @@ icon: fas fa-user
 hide: true
 size: 4/12
 form:
+  name: profile
+  messages:
+    success: true
+    error: true
   buttons:
     submit:
       type: submit

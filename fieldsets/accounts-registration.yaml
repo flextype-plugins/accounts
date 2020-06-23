@@ -5,6 +5,9 @@ size: 4/12
 hide: true
 form:
   name: registration
+  messages:
+    success: true
+    error: true
   buttons:
     submit:
       type: submit

@@ -36,14 +36,14 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | GET | /accounts/login | `accounts.login` | Login page |
 | GET | /accounts/registration | `accounts.registration` | Registration page |
 | GET | /accounts/reset-password | `accounts.resetPassword` | Reset password page |
-| GET | /accounts/profile/{username} | `accounts.profile` | Profile page |
-| GET | /accounts/profile/{username}/edit | `accounts.profileEdit` | Profile page |
-| POST | /accounts/profile/{username}/edit | `accounts.profileEditProcess` | Profile edit process |
+| GET | /accounts/profile/{email} | `accounts.profile` | Profile page |
+| GET | /accounts/profile/{email}/edit | `accounts.profileEdit` | Profile page |
+| POST | /accounts/profile/{email}/edit | `accounts.profileEditProcess` | Profile edit process |
 | POST | /accounts/registration | `accounts.profileRegistrationProcess` | Profile registration process |
 | POST | /accounts/login | `accounts.profileLoginProcess` | Profile login process |
 | POST | /accounts/logout | `accounts.profileLogoutProcess` | Profile login process |
 | POST | /accounts/reset-password | `accounts.resetPasswordProcess` | Reset password process |
-| POST | /new-password/{username}/{hash} | `accounts.newPasswordProcess` | New password process |
+| POST | /new-password/{email}/{hash} | `accounts.newPasswordProcess` | New password process |
 
 ### Settings
 
