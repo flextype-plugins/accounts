@@ -23,4 +23,4 @@ accounts_create_user: 사용자 새로 만들기
 accounts_reset: 초기화
 accounts_message_wrong_username_password: "잘못된 사용자 이름 또는 비밀번호"
 accounts_message_new_password_was_sended: "새로운 비밀번호가 보내졌습니다"
-accounts_message_hashed_password_reset_not_valid: "\"Hash for password reset is not valid"
+accounts_message_hashed_password_reset_not_valid: "Hash for password reset is not valid"
