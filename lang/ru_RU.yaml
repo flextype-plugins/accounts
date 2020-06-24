@@ -23,4 +23,4 @@ accounts_create_user: Создать пользователя
 accounts_reset: Сбросить
 accounts_message_new_password_was_sended: "Новый пароль был отправлен"
 accounts_message_hashed_password_reset_not_valid: "Хэш для сброса пароля неверен"
-accounts_message_wrong_email_password: "The email and password you entered did not match our records."
+accounts_message_wrong_email_password: "Введенный вами адрес электронной почты и пароль не совпадают с нашими записями."
