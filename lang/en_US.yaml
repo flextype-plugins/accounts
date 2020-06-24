@@ -21,6 +21,6 @@ accounts_cancel: Cancel
 accounts_save: Save
 accounts_create_user: Create User
 accounts_reset: Reset
-accounts_message_wrong_username_password: "Wrong username or password"
+accounts_message_wrong_email_password: "The email and password you entered did not match our records."
 accounts_message_new_password_was_sended: "New password was sended"
 accounts_message_hashed_password_reset_not_valid: "Hash for password reset is not valid"
