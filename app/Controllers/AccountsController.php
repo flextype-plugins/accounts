@@ -134,13 +134,13 @@ class AccountsController extends Container
                 }
             }
 
-            $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
+            $this->flash->addMessage('error', __('accounts_message_wrong_email_password'));
 
             return $response->withRedirect($this->router->pathFor('accounts.login'));
 
         }
 
-        $this->flash->addMessage('error', __('accounts_message_wrong_username_password'));
+        $this->flash->addMessage('error', __('accounts_message_wrong_email_password'));
 
         return $response->withRedirect($this->router->pathFor('accounts.login'));
     }
