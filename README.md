@@ -43,7 +43,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | POST | /accounts/login | `accounts.profileLoginProcess` | Profile login process |
 | POST | /accounts/logout | `accounts.profileLogoutProcess` | Profile login process |
 | POST | /accounts/reset-password | `accounts.resetPasswordProcess` | Reset password process |
-| POST | /new-password/{email}/{hash} | `accounts.newPasswordProcess` | New password process |
+| POST | /accounts/new-password/{email}/{hash} | `accounts.newPasswordProcess` | New password process |
 
 ### Settings
 
@@ -52,17 +52,23 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | enabled | true | true or false to disable the plugin |
 | priority | 80 | Accounts plugin priority |
 | from.email | support@flextype.org | From email |
+| index.enabled | true | Allow accounts index `true` or `false` |
 | registration.enabled | true | Allow user registration `true` or `false` |
 | registration.default_roles | user | Default roles for new users |
 | registration.default_state | enabled | Default state for new users |
 | registration.redirect.route.name | accounts.login | Redirect route name after new user registered. |
 | registration.redirect.route.link |  | Redirect link after new user registered. |
+| login.enabled | true | Allow user login `true` or `false` |
 | login.redirect.route.name | accounts.profile | Redirect route name after user logs in. |
 | login.redirect.route.link | | Redirect link after user logs in. |
+| profile.enabled | true | Allow user profile view `true` or `false` |
+| profile_edit.enabled | true | Allow user profile edit `true` or `false` |
 | profile_edit.redirect.route.name | accounts.profile | Redirect route name after user profile edited. |
 | profile_edit.redirect.route.link | | Redirect link after user profile edited. |
+| new_password.enabled | true | Allow user new password `true` or `false` |
 | new_password.redirect.route.name | accounts.login | Redirect route name after new password was sended. |
 | new_password.redirect.route.link | | Redirect link after new password was sended. |
+| reset_password.enabled | true | Allow user reset password `true` or `false` |
 | reset_password.redirect.route.name | accounts.login | Redirect route name after password was reset. |
 | reset_password.redirect.route.link | | Redirect link after password was reset. |
 | logout.redirect.route.name | accounts.login | Redirect route name after user logs out. |

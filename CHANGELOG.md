@@ -1,3 +1,18 @@
+<a name="1.1.5"></a>
+# [1.1.5](https://github.com/flextype-plugins/accounts) (2020-06-24)
+
+### Features
+
+* **accounts-controller**: add ability to restrict access for accounts pages.
+
+Each accounts pages, have it is own setting from now:
+
+```
+enabled: true
+```
+
+Values: `true` or `false`
+
 <a name="1.1.4"></a>
 # [1.1.4](https://github.com/flextype-plugins/accounts) (2020-06-24)
 

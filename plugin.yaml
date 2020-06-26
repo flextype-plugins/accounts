@@ -1,5 +1,5 @@
 name: Accounts
-version: 1.1.4
+version: 1.1.5
 description: Accounts plugins for Flextype.
 icon: fas fa-users
 author:
@@ -8,6 +8,7 @@ author:
   url: https://flextype.org
 homepage: https://github.com/flextype-plugins/accounts
 bugs: https://github.com/flextype-plugins/accounts/issues
+keywords: accounts, login, authentication
 license: MIT
 
 dependencies:
