@@ -1,0 +1,7 @@
+{% extends 'themes/' ~ registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+
+{% block content %}
+    <center>
+        {{ __('accounts_you_have_no_access_to_view_this_page') }}
+    </center>
+{% endblock %}

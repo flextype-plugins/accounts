@@ -2,7 +2,7 @@
     "name": "flextype-plugins/accounts",
     "type": "project",
     "description": "Accounts for Flextype.",
-    "keywords": ["accounts", "plugin", "flextype", "php", "html"],
+    "keywords": ["accounts", "login", "authentication", "plugin", "flextype", "php"],
     "homepage": "https://github.com/flextype-plugins/accounts",
     "license": "MIT",
     "authors": [
