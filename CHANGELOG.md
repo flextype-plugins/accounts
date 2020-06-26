@@ -1,3 +1,10 @@
+<a name="1.1.4"></a>
+# [1.1.4](https://github.com/flextype-plugins/accounts) (2020-06-24)
+
+### Bug Fixes
+
+* **accounts-controller**: fix potential vulnerability with raw password saving/viewing.
+
 <a name="1.1.3"></a>
 # [1.1.3](https://github.com/flextype-plugins/accounts) (2020-06-26)
 
