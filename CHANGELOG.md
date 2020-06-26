@@ -1,10 +1,22 @@
+<a name="1.1.3"></a>
+# [1.1.3](https://github.com/flextype-plugins/accounts) (2020-06-26)
+
+### Features
+
+* **accounts-controller**: add ability to close accounts index page
+
+```
+# Index(accounts)
+index:
+  enabled: false
+```
+
 <a name="1.1.2"></a>
 # [1.1.2](https://github.com/flextype-plugins/accounts) (2020-06-24)
 
 ### Bug Fixes
 
 * **lang**: fix translates
-
 
 <a name="1.1.1"></a>
 # [1.1.1](https://github.com/flextype-plugins/accounts) (2020-06-23)
