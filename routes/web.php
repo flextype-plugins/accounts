@@ -21,7 +21,6 @@ $app->group('/accounts', function () use ($app, $flextype) {
     $app->get('/registration', 'AccountsController:registration')->setName('accounts.registration');
     $app->post('/registration', 'AccountsController:registrationProcess')->setName('accounts.registrationProcess');
     $app->get('/profile/{email}', 'AccountsController:profile')->setName('accounts.profile');
-    $app->get('/no-access', 'AccountsController:noAccess')->setName('accounts.no-access');
 })->add('csrf');
 
 $app->group('/accounts', function () use ($app, $flextype) {
