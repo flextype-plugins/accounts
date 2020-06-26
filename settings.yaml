@@ -9,6 +9,10 @@ from:
   name: Flextype
   email: support@flextype.org
 
+# Index(accounts)
+index:
+  enabled: false
+
 # Registraton
 registration:
   enabled: true
