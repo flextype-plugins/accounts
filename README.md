@@ -44,7 +44,6 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 | POST | /accounts/logout | `accounts.profileLogoutProcess` | Profile login process |
 | POST | /accounts/reset-password | `accounts.resetPasswordProcess` | Reset password process |
 | POST | /accounts/new-password/{email}/{hash} | `accounts.newPasswordProcess` | New password process |
-| GET | /accounts/no-access | `accounts.no-access` | Page with no access information |
 
 ### Settings
 
