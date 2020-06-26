@@ -44,7 +44,7 @@ class AccountsController extends Container
     public function index(Request $request, Response $response, array $args) : Response
     {
         if ($this->registry->get('plugins.accounts.settings.index.enabled') === false) {
-            return $response->withRedirect($this->router->pathFor('accounts.login'));
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
         }
 
         $accounts_list = Filesystem::listContents(PATH['project'] . '/accounts');
@@ -84,6 +84,10 @@ class AccountsController extends Container
      */
     public function login(Request $request, Response $response, array $args) : Response
     {
+        if ($this->registry->get('plugins.accounts.settings.login.enabled') === false) {
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
+        }
+
         if ($this->acl->isUserLoggedIn()) {
             return $response->withRedirect($this->router->pathFor('accounts.profile', ['email' => $this->acl->getUserLoggedInEmail()]));
         }
@@ -263,6 +267,10 @@ class AccountsController extends Container
      */
     public function resetPassword(Request $request, Response $response, array $args) : Response
     {
+        if ($this->registry->get('plugins.accounts.settings.reset_password.enabled') === false) {
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
+        }
+
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/registration.html';
         $plugin_template_path = 'plugins/accounts/templates/reset-password.html';
         $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
@@ -376,7 +384,7 @@ class AccountsController extends Container
     public function registration(Request $request, Response $response, array $args) : Response
     {
         if ($this->registry->get('plugins.accounts.settings.registration.enabled') === false) {
-            return $response->withRedirect($this->router->pathFor('accounts.login'));
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
         }
 
         if ($this->acl->isUserLoggedIn()) {
@@ -511,6 +519,10 @@ class AccountsController extends Container
      */
     public function profile(Request $request, Response $response, array $args) : Response
     {
+        if ($this->registry->get('plugins.accounts.settings.profile.enabled') === false) {
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
+        }
+
         $email = $args['email'];
 
         // Redirect to accounts index if profile not founded
@@ -547,6 +559,10 @@ class AccountsController extends Container
      */
     public function profileEdit(Request $request, Response $response, array $args) : Response
     {
+        if ($this->registry->get('plugins.accounts.settings.profile_edit.enabled') === false) {
+            return $response->withRedirect($this->router->pathFor('accounts.no-access'));
+        }
+
         $email = $args['email'];
 
         // Redirect to accounts index if profile not founded
@@ -644,6 +660,22 @@ class AccountsController extends Container
         }
 
         return $response->withRedirect($this->router->pathFor('accounts.registration'));
+    }
+
+    /**
+     * No Access page
+     *
+     * @param Request  $request  PSR7 request
+     * @param Response $response PSR7 response
+     * @param array    $args     Args
+     */
+    public function noAccess(Request $request, Response $response, array $args) : Response
+    {
+        $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/no-access.html';
+        $plugin_template_path = 'plugins/accounts/templates/no-access.html';
+        $template_path        = Filesystem::has(PATH['project'] . '/' . $theme_template_path) ? $theme_template_path : $plugin_template_path;
+
+        return $this->twig->render($response, $template_path);
     }
 
     /**

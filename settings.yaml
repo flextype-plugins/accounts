@@ -11,7 +11,7 @@ from:
 
 # Index(accounts)
 index:
-  enabled: false
+  enabled: true
 
 # Registraton
 registration:
@@ -24,24 +24,32 @@ registration:
 
 # Login
 login:
+  enabled: true
   redirect:
     route:
       name: accounts.profile
 
+# Profile
+profile:
+  enabled: true
+
 # Profile Edit
 profile_edit:
+  enabled: true
   redirect:
     route:
       name: accounts.profile
 
 # New Password
 new_password:
+  enabled: true
   redirect:
     route:
       name: accounts.login
 
 # Reset Password
 reset_password:
+  enabled: true
   redirect:
     route:
       name: accounts.login
