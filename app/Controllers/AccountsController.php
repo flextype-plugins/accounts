@@ -60,6 +60,7 @@ class AccountsController extends Container
             $_path = explode('/', $account['path']);
             $account_to_store['email'] = array_pop($_path);
 
+            Arr::delete($account, 'password');
             Arr::delete($account, 'hashed_password');
             Arr::delete($account, 'hashed_password_reset');
 
@@ -521,6 +522,7 @@ class AccountsController extends Container
         $profile['email'] = $email;
 
         Arr::delete($profile, 'uuid');
+        Arr::delete($profile, 'password');
         Arr::delete($profile, 'hashed_password');
         Arr::delete($profile, 'hashed_password_reset');
         Arr::delete($profile, 'roles');
