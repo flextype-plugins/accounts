@@ -43,6 +43,10 @@ class AccountsController extends Container
      */
     public function index(Request $request, Response $response, array $args) : Response
     {
+        if ($this->registry->get('plugins.accounts.settings.index.enabled') === false) {
+            return $response->withRedirect($this->router->pathFor('accounts.login'));
+        }
+
         $accounts_list = Filesystem::listContents(PATH['project'] . '/accounts');
         $accounts      = [];
 
@@ -371,7 +375,7 @@ class AccountsController extends Container
     public function registration(Request $request, Response $response, array $args) : Response
     {
         if ($this->registry->get('plugins.accounts.settings.registration.enabled') === false) {
-             return $response->withRedirect($this->router->pathFor('accounts.login'));
+            return $response->withRedirect($this->router->pathFor('accounts.login'));
         }
 
         if ($this->acl->isUserLoggedIn()) {
