@@ -2,5 +2,5 @@
 
 {% block content %}
     <h3>{{ __('accounts_registration') }}</h3>
-    {{ form.render(serializer_decode(filesystem_read(PATH_PROJECT ~ '/fieldsets/accounts-registration.yaml'), 'yaml'), {})|raw }}
+    {{ form.render(yaml_decode(filesystem_read(PATH_PROJECT ~ '/fieldsets/accounts-registration.yaml')), {})|raw }}
 {% endblock %}

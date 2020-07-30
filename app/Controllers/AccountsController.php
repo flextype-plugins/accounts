@@ -9,9 +9,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Flextype;
+ namespace Flextype\Plugin\Accounts\Controllers;
 
-use Flextype\Component\Arr\Arr;
+use Flextype\Component\Arrays\Arrays;
 use Flextype\Component\Filesystem\Filesystem;
 use Flextype\Component\Session\Session;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -31,6 +31,7 @@ use function random_bytes;
 use function strtr;
 use function time;
 use function trim;
+use Flextype\App\Foundation\Container;
 
 class AccountsController extends Container
 {
@@ -60,14 +61,14 @@ class AccountsController extends Container
                 continue;
             }
 
-            $account_to_store = $this->serializer->decode(Filesystem::read($account['path'] . '/profile.yaml'), 'yaml');
+            $account_to_store = $this->yaml->decode(Filesystem::read($account['path'] . '/profile.yaml'));
 
             $_path = explode('/', $account['path']);
             $account_to_store['email'] = array_pop($_path);
 
-            Arr::delete($account, 'password');
-            Arr::delete($account, 'hashed_password');
-            Arr::delete($account, 'hashed_password_reset');
+            Arrays::delete($account, 'password');
+            Arrays::delete($account, 'hashed_password');
+            Arrays::delete($account, 'hashed_password_reset');
 
 
             $accounts[] = $account_to_store;
@@ -125,7 +126,7 @@ class AccountsController extends Container
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
 
-            $user_file = $this->serializer->decode(Filesystem::read($_user_file), 'yaml', false);
+            $user_file = $this->yaml->decode(Filesystem::read($_user_file), false);
 
             if (password_verify(trim($post_data['password']), $user_file['hashed_password'])) {
 
@@ -177,7 +178,7 @@ class AccountsController extends Container
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             $user_file_body = Filesystem::read($_user_file);
-            $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
+            $user_file_data = $this->yaml->decode($user_file_body);
 
             if (is_null($user_file_data['hashed_password_reset'])) {
                 $this->flash->addMessage('error', __('accounts_message_hashed_password_reset_not_valid'));
@@ -192,13 +193,12 @@ class AccountsController extends Container
 
                 $user_file_data['hashed_password'] = $hashed_password;
 
-                Arr::delete($user_file_data, 'hashed_password_reset');
+                Arrays::delete($user_file_data, 'hashed_password_reset');
 
                 if (Filesystem::write(
                     PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                    $this->serializer->encode(
-                        $user_file_data,
-                        'yaml'
+                    $this->yaml->encode(
+                        $user_file_data
                     )
                 )) {
                     // Instantiation and passing `true` enables exceptions
@@ -208,7 +208,7 @@ class AccountsController extends Container
                     $plugin_new_password_email_path = 'plugins/accounts/templates/emails/new-password.md';
                     $email_template_path            = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_new_password_email_path : $plugin_new_password_email_path;
 
-                    $new_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
+                    $new_password_email = $this->frontmatter->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                     //Recipients
                     $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
@@ -234,8 +234,8 @@ class AccountsController extends Container
                         '{url}' => $url,
                     ];
 
-                    $subject = $this->parser->parse($new_password_email['subject'], 'shortcodes');
-                    $content = $this->parser->parse($this->parser->parse($new_password_email['content'], 'shortcodes'), 'markdown');
+                    $subject = $this->shortcode->parse($new_password_email['subject']);
+                    $content = $this->markdown->parse($this->shortcode->parse($new_password_email['content']));
 
                     // Content
                     $mail->isHTML(true);
@@ -309,23 +309,22 @@ class AccountsController extends Container
         $email = $post_data['email'];
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
-            Arr::delete($post_data, 'csrf_name');
-            Arr::delete($post_data, 'csrf_value');
-            Arr::delete($post_data, 'form-save-action');
-            Arr::delete($post_data, 'email');
+            Arrays::delete($post_data, 'csrf_name');
+            Arrays::delete($post_data, 'csrf_value');
+            Arrays::delete($post_data, 'form-save-action');
+            Arrays::delete($post_data, 'email');
 
             $raw_hash                           = bin2hex(random_bytes(16));
             $post_data['hashed_password_reset'] = password_hash($raw_hash, PASSWORD_BCRYPT);
 
             $user_file_body = Filesystem::read($_user_file);
-            $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
+            $user_file_data = $this->yaml->decode($user_file_body);
 
             // Create account
             if (Filesystem::write(
                 PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                $this->serializer->encode(
-                    array_merge($user_file_data, $post_data),
-                    'yaml'
+                $this->yaml->encode(
+                    array_merge($user_file_data, $post_data)
                 )
             )) {
                 // Instantiation and passing `true` enables exceptions
@@ -335,7 +334,7 @@ class AccountsController extends Container
                 $plugin_reset_password_email_path = 'plugins/accounts/templates/emails/reset-password.md';
                 $email_template_path              = Filesystem::has(PATH['project'] . '/' . $theme_reset_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
 
-                $reset_password_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
+                $reset_password_email = $this->frontmatter->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                 //Recipients
                 $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
@@ -361,8 +360,8 @@ class AccountsController extends Container
                     '{new_hash}' => $raw_hash,
                 ];
 
-                $subject = $this->parser->parse($reset_password_email['subject'], 'shortcodes');
-                $content = $this->parser->parse($this->parser->parse($reset_password_email['content'], 'shortcodes'), 'markdown');
+                $subject = $this->shortcode->parse($reset_password_email['subject']);
+                $content = $this->markdown->parse($this->shortcode->parse($reset_password_email['content']));
 
                 // Content
                 $mail->isHTML(true);
@@ -453,11 +452,11 @@ class AccountsController extends Container
             $data['state']           = $this->registry->get('plugins.accounts.settings.registration.default_state');
 
             // Delete fields from POST DATA
-            Arr::delete($post_data, 'email');
-            Arr::delete($post_data, 'csrf_name');
-            Arr::delete($post_data, 'csrf_value');
-            Arr::delete($post_data, 'password');
-            Arr::delete($post_data, 'form-save-action');
+            Arrays::delete($post_data, 'email');
+            Arrays::delete($post_data, 'csrf_name');
+            Arrays::delete($post_data, 'csrf_value');
+            Arrays::delete($post_data, 'password');
+            Arrays::delete($post_data, 'form-save-action');
 
             // Create accounts directory and account
             Filesystem::createDir(PATH['project'] . '/accounts/' . $email);
@@ -465,9 +464,8 @@ class AccountsController extends Container
             // Create admin account
             if (Filesystem::write(
                 PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                $this->serializer->encode(
-                    array_merge($post_data, $data),
-                    'yaml'
+                $this->yaml->encode(
+                    array_merge($post_data, $data)
                 )
             )) {
                 // Instantiation and passing `true` enables exceptions
@@ -477,7 +475,7 @@ class AccountsController extends Container
                 $plugin_new_user_email_path = 'plugins/accounts/templates/emails/new-user.md';
                 $email_template_path        = Filesystem::has(PATH['project'] . '/' . $theme_new_user_email_path) ? $theme_new_user_email_path : $plugin_new_user_email_path;
 
-                $new_user_email = $this->serializer->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path), 'frontmatter');
+                $new_user_email = $this->frontmatter->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                 //Recipients
                 $mail->setFrom($this->registry->get('plugins.accounts.settings.from.email'), $this->registry->get('plugins.accounts.settings.from.name'));
@@ -494,8 +492,8 @@ class AccountsController extends Container
                     '{user}'    => $user,
                 ];
 
-                $subject = $this->parser->parse($new_user_email['subject'], 'shortcodes');
-                $content = $this->parser->parse($this->parser->parse($new_user_email['content'], 'shortcodes'), 'markdown');
+                $subject = $this->shortcode->parse($new_user_email['subject']);
+                $content = $this->markdown->parse($this->shortcode->parse($new_user_email['content']));
 
                 // Content
                 $mail->isHTML(true);
@@ -555,14 +553,14 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.index'));
         }
 
-        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'), 'yaml');
+        $profile = $this->yaml->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
         $profile['email'] = $email;
 
-        Arr::delete($profile, 'uuid');
-        Arr::delete($profile, 'password');
-        Arr::delete($profile, 'hashed_password');
-        Arr::delete($profile, 'hashed_password_reset');
-        Arr::delete($profile, 'roles');
+        Arrays::delete($profile, 'uuid');
+        Arrays::delete($profile, 'password');
+        Arrays::delete($profile, 'hashed_password');
+        Arrays::delete($profile, 'hashed_password_reset');
+        Arrays::delete($profile, 'roles');
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile.html';
         $plugin_template_path = 'plugins/accounts/templates/profile.html';
@@ -600,7 +598,7 @@ class AccountsController extends Container
             return $response->withRedirect($this->router->pathFor('accounts.index'));
         }
 
-        $profile = $this->serializer->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'), 'yaml');
+        $profile = $this->yaml->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
 
         $theme_template_path  = 'themes/' . $this->registry->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
         $plugin_template_path = 'plugins/accounts/templates/profile-edit.html';
@@ -609,9 +607,9 @@ class AccountsController extends Container
         $profile['email'] = $email;
 
         if ($email === $this->acl->getUserLoggedInEmail()) {
-            Arr::delete($profile, 'uuid');
-            Arr::delete($profile, 'hashed_password');
-            Arr::delete($profile, 'roles');
+            Arrays::delete($profile, 'uuid');
+            Arrays::delete($profile, 'hashed_password');
+            Arrays::delete($profile, 'roles');
 
             return $this->twig->render($response, $template_path, ['profile' => $profile]);
         }
@@ -641,29 +639,28 @@ class AccountsController extends Container
         $user_profile_path = $current_user_profile_path;
 
         if (Filesystem::has($user_profile_path)) {
-            Arr::delete($post_data, 'csrf_name');
-            Arr::delete($post_data, 'csrf_value');
-            Arr::delete($post_data, 'form-save-action');
-            Arr::delete($post_data, 'password');
-            Arr::delete($post_data, 'email');
+            Arrays::delete($post_data, 'csrf_name');
+            Arrays::delete($post_data, 'csrf_value');
+            Arrays::delete($post_data, 'form-save-action');
+            Arrays::delete($post_data, 'password');
+            Arrays::delete($post_data, 'email');
 
             if (! empty($post_data['new_password'])) {
                 $post_data['hashed_password'] = password_hash($post_data['new_password'], PASSWORD_BCRYPT);
-                Arr::delete($post_data, 'new_password');
+                Arrays::delete($post_data, 'new_password');
             } else {
-                Arr::delete($post_data, 'password');
-                Arr::delete($post_data, 'new_password');
+                Arrays::delete($post_data, 'password');
+                Arrays::delete($post_data, 'new_password');
             }
 
             $user_file_body = Filesystem::read($user_profile_path);
-            $user_file_data = $this->serializer->decode($user_file_body, 'yaml');
+            $user_file_data = $this->yaml->decode($user_file_body);
 
             // Create admin account
             if (Filesystem::write(
                 $user_profile_path,
-                $this->serializer->encode(
-                    array_merge($user_file_data, $post_data),
-                    'yaml'
+                $this->yaml->encode(
+                    array_merge($user_file_data, $post_data)
                 )
             )) {
 
