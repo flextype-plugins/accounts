@@ -1,5 +1,5 @@
 name: Accounts
-version: 1.1.5
+version: 1.2.0
 description: Accounts plugins for Flextype.
 icon: fas fa-users
 author:
@@ -12,7 +12,7 @@ keywords: accounts, login, authentication
 license: MIT
 
 dependencies:
-  flextype: 0.9.8
+  flextype: 0.9.9
   site: '>=1.0.0'
   twig: '>=1.0.0'
   form: '>=1.0.0'
