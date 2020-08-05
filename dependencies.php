@@ -9,7 +9,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Flextype;
+namespace Flextype\Plugin\Accounts;
+
+use Flextype\Plugin\Accounts\Controllers\AccountsController;
 
 /**
  * Add accounts controller to Flextype container

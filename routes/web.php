@@ -9,7 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Flextype;
+use Flextype\Plugin\Acl\Middlewares\AclIsUserLoggedInMiddleware;
 
 $app->group('/accounts', function () use ($app, $flextype) {
     $app->get('', 'AccountsController:index')->setName('accounts.index');
