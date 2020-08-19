@@ -16,6 +16,6 @@ use Flextype\Plugin\Accounts\Controllers\AccountsController;
 /**
  * Add accounts controller to Flextype container
  */
-$flextype['AccountsController'] = static function ($container) {
-    return new AccountsController($container);
+$flextype->container()['AccountsController'] = static function () use ($flextype) {
+    return new AccountsController($flextype);
 };
