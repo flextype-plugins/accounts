@@ -11,20 +11,20 @@ declare(strict_types=1);
 
 use Flextype\Plugin\Acl\Middlewares\AclIsUserLoggedInMiddleware;
 
-$app->group('/accounts', function () use ($app, $flextype) {
-    $app->get('', 'AccountsController:index')->setName('accounts.index');
-    $app->get('/login', 'AccountsController:login')->setName('accounts.login');
-    $app->post('/login', 'AccountsController:loginProcess')->setName('accounts.loginProcess');
-    $app->get('/reset-password', 'AccountsController:resetPassword')->setName('accounts.resetPassword');
-    $app->post('/reset-password', 'AccountsController:resetPasswordProcess')->setName('accounts.resetPasswordProcess');
-    $app->get('/new-password/{email}/{hash}', 'AccountsController:newPasswordProcess')->setName('accounts.newPasswordProcess');
-    $app->get('/registration', 'AccountsController:registration')->setName('accounts.registration');
-    $app->post('/registration', 'AccountsController:registrationProcess')->setName('accounts.registrationProcess');
-    $app->get('/profile/{email}', 'AccountsController:profile')->setName('accounts.profile');
+$flextype->group('/accounts', function () use ($flextype) {
+    $flextype->get('', 'AccountsController:index')->setName('accounts.index');
+    $flextype->get('/login', 'AccountsController:login')->setName('accounts.login');
+    $flextype->post('/login', 'AccountsController:loginProcess')->setName('accounts.loginProcess');
+    $flextype->get('/reset-password', 'AccountsController:resetPassword')->setName('accounts.resetPassword');
+    $flextype->post('/reset-password', 'AccountsController:resetPasswordProcess')->setName('accounts.resetPasswordProcess');
+    $flextype->get('/new-password/{email}/{hash}', 'AccountsController:newPasswordProcess')->setName('accounts.newPasswordProcess');
+    $flextype->get('/registration', 'AccountsController:registration')->setName('accounts.registration');
+    $flextype->post('/registration', 'AccountsController:registrationProcess')->setName('accounts.registrationProcess');
+    $flextype->get('/profile/{email}', 'AccountsController:profile')->setName('accounts.profile');
 })->add('csrf');
 
-$app->group('/accounts', function () use ($app, $flextype) {
-    $app->post('/logout', 'AccountsController:logoutProcess')->setName('accounts.logoutProcess');
-    $app->get('/profile/{email}/edit', 'AccountsController:profileEdit')->setName('accounts.profileEdit');
-    $app->post('/profile/{email}/edit', 'AccountsController:profileEditProcess')->setName('accounts.profileEditProcess');
-})->add(new AclIsUserLoggedInMiddleware(['container' => $flextype, 'redirect' => 'accounts.login']))->add('csrf');
+$flextype->group('/accounts', function () use ($flextype) {
+    $flextype->post('/logout', 'AccountsController:logoutProcess')->setName('accounts.logoutProcess');
+    $flextype->get('/profile/{email}/edit', 'AccountsController:profileEdit')->setName('accounts.profileEdit');
+    $flextype->post('/profile/{email}/edit', 'AccountsController:profileEditProcess')->setName('accounts.profileEditProcess');
+})->add(new AclIsUserLoggedInMiddleware($flextype, ['redirect' => 'accounts.login']))->add('csrf');
