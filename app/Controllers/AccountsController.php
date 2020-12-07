@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 use Flextype\Component\Arrays\Arrays;
 use Flextype\Component\Filesystem\Filesystem;
-use Flextype\Component\Session\Session;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -37,14 +37,14 @@ class AccountsController
    /**
     * Flextype Application
     */
-    
+
 
    /**
     * __construct
     */
     public function __construct()
     {
-        
+
     }
 
     /**
@@ -727,7 +727,7 @@ class AccountsController
      */
     public function logoutProcess(Request $request, Response $response) : Response
     {
-        Session::destroy();
+        flextype('session')->destroy();
 
         // Run event onAccountsLogout
         flextype('emitter')->emit('onAccountsLogout');
