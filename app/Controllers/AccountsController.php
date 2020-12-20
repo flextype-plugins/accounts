@@ -73,7 +73,7 @@ class AccountsController
                 continue;
             }
 
-            $account_to_store = flextype('yaml')->decode(Filesystem::read($account['path'] . '/profile.yaml'));
+            $account_to_store = flextype('serializers')->yaml()->decode(Filesystem::read($account['path'] . '/profile.yaml'));
 
             $_path = explode('/', $account['path']);
             $account_to_store['email'] = array_pop($_path);
@@ -138,7 +138,7 @@ class AccountsController
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
 
-            $user_file = flextype('yaml')->decode(Filesystem::read($_user_file), false);
+            $user_file = flextype('serializers')->yaml()->decode(Filesystem::read($_user_file), false);
 
             if (password_verify(trim($post_data['password']), $user_file['hashed_password'])) {
 
@@ -190,7 +190,7 @@ class AccountsController
 
         if (Filesystem::has($_user_file = PATH['project'] . '/accounts/' . $email . '/profile.yaml')) {
             $user_file_body = Filesystem::read($_user_file);
-            $user_file_data = flextype('yaml')->decode($user_file_body);
+            $user_file_data = flextype('serializers')->yaml()->decode($user_file_body);
 
             if (is_null($user_file_data['hashed_password_reset'])) {
                 flextype('flash')->addMessage('error', __('accounts_message_hashed_password_reset_not_valid'));
@@ -209,7 +209,7 @@ class AccountsController
 
                 if (Filesystem::write(
                     PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                    flextype('yaml')->encode(
+                    flextype('serializers')->yaml()->encode(
                         $user_file_data
                     )
                 )) {
@@ -222,7 +222,7 @@ class AccountsController
                         $plugin_new_password_email_path = 'plugins/accounts/templates/emails/new-password.md';
                         $email_template_path            = Filesystem::has(PATH['project'] . '/' . $theme_new_password_email_path) ? $theme_new_password_email_path : $plugin_new_password_email_path;
 
-                        $new_password_email = flextype('frontmatter')->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
+                        $new_password_email = flextype('serializers')->frontmatter()->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                         //Recipients
                         $mail->setFrom(flextype('registry')->get('plugins.accounts.settings.from.email'), flextype('registry')->get('plugins.accounts.settings.from.name'));
@@ -248,8 +248,8 @@ class AccountsController
                             '{url}' => $url,
                         ];
 
-                        $subject = flextype('shortcode')->process($new_password_email['subject']);
-                        $content = flextype('markdown')->parse(flextype('shortcode')->process($new_password_email['content']));
+                        $subject = flextype('parsers')->shortcode()->process($new_password_email['subject']);
+                        $content = flextype('parsers')->markdown()->parse(flextype('parsers')->shortcode()->process($new_password_email['content']));
 
                         // Content
                         $mail->isHTML(true);
@@ -336,12 +336,12 @@ class AccountsController
             $post_data['hashed_password_reset'] = password_hash($raw_hash, PASSWORD_BCRYPT);
 
             $user_file_body = Filesystem::read($_user_file);
-            $user_file_data = flextype('yaml')->decode($user_file_body);
+            $user_file_data = flextype('serializers')->yaml()->decode($user_file_body);
 
             // Create account
             if (Filesystem::write(
                 PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                flextype('yaml')->encode(
+                flextype('serializers')->yaml()->encode(
                     array_merge($user_file_data, $post_data)
                 )
             )) {
@@ -354,7 +354,7 @@ class AccountsController
                     $plugin_reset_password_email_path = 'plugins/accounts/templates/emails/reset-password.md';
                     $email_template_path              = Filesystem::has(PATH['project'] . '/' . $theme_reset_password_email_path) ? $theme_reset_password_email_path : $plugin_reset_password_email_path;
 
-                    $reset_password_email = flextype('frontmatter')->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
+                    $reset_password_email = flextype('serializers')->frontmatter()->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                     //Recipients
                     $mail->setFrom(flextype('registry')->get('plugins.accounts.settings.from.email'), flextype('registry')->get('plugins.accounts.settings.from.name'));
@@ -380,8 +380,8 @@ class AccountsController
                         '{new_hash}' => $raw_hash,
                     ];
 
-                    $subject = flextype('shortcode')->process($reset_password_email['subject']);
-                    $content = flextype('markdown')->parse(flextype('shortcode')->process($reset_password_email['content']));
+                    $subject = flextype('parsers')->shortcode()->process($reset_password_email['subject']);
+                    $content = flextype('parsers')->markdown()->parse(flextype('parsers')->shortcode()->process($reset_password_email['content']));
 
                     // Content
                     $mail->isHTML(true);
@@ -488,7 +488,7 @@ class AccountsController
             // Create admin account
             if (Filesystem::write(
                 PATH['project'] . '/accounts/' . $email . '/profile.yaml',
-                flextype('yaml')->encode(
+                flextype('serializers')->yaml()->encode(
                     array_merge($post_data, $data)
                 )
             )) {
@@ -501,7 +501,7 @@ class AccountsController
                     $plugin_new_user_email_path = 'plugins/accounts/templates/emails/new-user.md';
                     $email_template_path        = Filesystem::has(PATH['project'] . '/' . $theme_new_user_email_path) ? $theme_new_user_email_path : $plugin_new_user_email_path;
 
-                    $new_user_email = flextype('frontmatter')->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
+                    $new_user_email = flextype('serializers')->frontmatter()->decode(Filesystem::read(PATH['project'] . '/' . $email_template_path));
 
                     //Recipients
                     $mail->setFrom(flextype('registry')->get('plugins.accounts.settings.from.email'), flextype('registry')->get('plugins.accounts.settings.from.name'));
@@ -518,8 +518,8 @@ class AccountsController
                         '{user}'    => $user,
                     ];
 
-                    $subject = flextype('shortcode')->process($new_user_email['subject']);
-                    $content = flextype('markdown')->parse(flextype('shortcode')->process($new_user_email['content']));
+                    $subject = flextype('parsers')->shortcode()->process($new_user_email['subject']);
+                    $content = flextype('parsers')->markdown()->parse(flextype('parsers')->shortcode()->process($new_user_email['content']));
 
                     // Content
                     $mail->isHTML(true);
@@ -583,7 +583,7 @@ class AccountsController
             return $response->withRedirect(flextype('router')->pathFor('accounts.index'));
         }
 
-        $profile = flextype('yaml')->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
+        $profile = flextype('serializers')->yaml()->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
         $profile['email'] = $email;
 
         Arrays::delete($profile, 'uuid');
@@ -628,7 +628,7 @@ class AccountsController
             return $response->withRedirect(flextype('router')->pathFor('accounts.index'));
         }
 
-        $profile = flextype('yaml')->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
+        $profile = flextype('serializers')->yaml()->decode(Filesystem::read(PATH['project'] . '/accounts/' . $email . '/profile.yaml'));
 
         $theme_template_path  = 'themes/' . flextype('registry')->get('plugins.site.settings.theme') . '/templates/accounts/templates/profile-edit.html';
         $plugin_template_path = 'plugins/accounts/templates/profile-edit.html';
@@ -684,12 +684,12 @@ class AccountsController
             }
 
             $user_file_body = Filesystem::read($user_profile_path);
-            $user_file_data = flextype('yaml')->decode($user_file_body);
+            $user_file_data = flextype('serializers')->yaml()->decode($user_file_body);
 
             // Create admin account
             if (Filesystem::write(
                 $user_profile_path,
-                flextype('yaml')->encode(
+                flextype('serializers')->yaml()->encode(
                     array_merge($user_file_data, $post_data)
                 )
             )) {
