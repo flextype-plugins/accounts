@@ -12,7 +12,7 @@ keywords: accounts, login, authentication
 license: MIT
 
 dependencies:
-  flextype: 0.9.13
+  flextype: 0.9.14
   site: '>=1.0.0'
   twig: '>=1.0.0'
   form: '>=1.0.0'
