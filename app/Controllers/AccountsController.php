@@ -9,7 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
- namespace Flextype\Plugin\Accounts\Controllers;
+namespace Flextype\Plugin\Accounts\Controllers;
 
 use Flextype\Component\Arrays\Arrays;
 use Flextype\Component\Filesystem\Filesystem;
@@ -34,19 +34,6 @@ use function trim;
 
 class AccountsController
 {
-   /**
-    * Flextype Application
-    */
-
-
-   /**
-    * __construct
-    */
-    public function __construct()
-    {
-
-    }
-
     /**
      * Index page
      *
