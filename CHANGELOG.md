@@ -1,5 +1,12 @@
-<a name="1.6.0"></a>
-# [1.6.0](https://github.com/flextype-plugins/accounts) (2020-12-28)
+<a name="1.7.1"></a>
+# [1.7.1](https://github.com/flextype-plugins/accounts) (2020-12-29)
+
+### Bug Fixes
+
+* **core** typo fix
+
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/flextype-plugins/accounts) (2020-12-28)
 
 ### Features
 
