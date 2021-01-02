@@ -10,10 +10,3 @@ declare(strict_types=1);
  */
 
 namespace Flextype\Plugin\Accounts;
-
-use Flextype\Plugin\Accounts\Controllers\AccountsController;
-
-/**
- * Add accounts controller to Flextype container
- */
-flextype()->container()['AccountsController'] = fn() => new AccountsController();
