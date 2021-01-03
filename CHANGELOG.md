@@ -1,3 +1,11 @@
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/flextype-plugins/accounts) (2021-01-03)
+
+### Features
+
+* **core** add plugin.php file
+* **routes** improve controllers handling in routes for performance enhancements
+
 <a name="1.7.1"></a>
 # [1.7.1](https://github.com/flextype-plugins/accounts) (2020-12-29)
 
