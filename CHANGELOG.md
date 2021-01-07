@@ -1,3 +1,10 @@
+<a name="1.9.1"></a>
+# [1.9.1](https://github.com/flextype-plugins/accounts) (2021-01-09)
+
+### Bug Fixes
+
+* **core** typo fix
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/flextype-plugins/accounts) (2021-01-07)
 
