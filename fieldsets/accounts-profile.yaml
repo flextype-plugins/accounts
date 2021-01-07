@@ -1,6 +1,8 @@
 title: Profile
 default_field: title
-icon: fas fa-user
+icon:
+  name: user
+  set: "fontawesome|solid"
 hide: true
 size: 4/12
 form:

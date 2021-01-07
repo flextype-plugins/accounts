@@ -13,9 +13,9 @@
         {% endfor %}
     </table>
     {% if flextype.acl.getUserLoggedInEmail() == profile.email %}
-        <a href="{{ path_for('accounts.profileEdit', {'email': profile.email}) }}">{{ __('accounts_profile_edit') }}</a>
+        <a href="{{ urlFor('accounts.profileEdit', {'email': profile.email}) }}">{{ __('accounts_profile_edit') }}</a>
         <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ __('accounts_logout') }}</a>
-        <form id="accountsLogoutProcess" action="{{ path_for('accounts.logoutProcess') }}" method="POST" style="display: none;">
+        <form id="accountsLogoutProcess" action="{{ urlFor('accounts.logoutProcess') }}" method="POST" style="display: none;">
             {{ csrf() }}
         </form>
     {% endif %}
