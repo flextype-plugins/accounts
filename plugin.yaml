@@ -1,20 +1,19 @@
 name: Accounts
-version: 1.9.1
+version: 1.10.0
 description: Accounts plugins for Flextype.
 icon:
   name: user
   set: "fontawesome|solid"
 author:
   name: Sergey Romanenko
-  email: support@flextype.org
+  email: sergey.romanenko@flextype.org
   url: https://flextype.org
 homepage: https://github.com/flextype-plugins/accounts
 bugs: https://github.com/flextype-plugins/accounts/issues
-keywords: accounts, login, authentication
 license: MIT
 
 dependencies:
-  flextype: 0.9.15
+  flextype: 0.9.16
   site: '>=1.0.0'
   twig: '>=2.0.0'
   form: '>=1.0.0'
