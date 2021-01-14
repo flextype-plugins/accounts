@@ -33,8 +33,3 @@ $accounts_loader = require_once $accounts_autoload;
  * Include web routes
  */
 include_once 'routes/web.php';
-
-/**
- * Include dependencies
- */
-include_once 'dependencies.php';
