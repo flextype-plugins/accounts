@@ -51,7 +51,7 @@ The following dependencies need to be downloaded and installed for Accounts Plug
 |---|---|---|
 | enabled | true | true or false to disable the plugin |
 | priority | 80 | Accounts plugin priority |
-| from.email | support@flextype.org | From email |
+| from.email | sergey.romanenko@flextype.org | From email |
 | index.enabled | true | Allow accounts index `true` or `false` |
 | registration.enabled | true | Allow user registration `true` or `false` |
 | registration.default_roles | user | Default roles for new users |
