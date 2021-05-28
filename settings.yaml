@@ -7,7 +7,7 @@ priority: 100
 # From email
 from:
   name: Flextype
-  email: support@flextype.org
+  email: sergey.romanenko@flextype.org
 
 # Index(accounts)
 index:
