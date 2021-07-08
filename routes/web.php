@@ -9,6 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+use Flextype\Middlewares\CsrfMiddleware;
 use Flextype\Plugin\Acl\Middlewares\AclIsUserLoggedInMiddleware;
 use Flextype\Plugin\Accounts\Controllers\AccountsController;
 
@@ -22,10 +23,11 @@ flextype()->group('/accounts', function () {
     flextype()->get('/registration', AccountsController::class . ':registration')->setName('accounts.registration');
     flextype()->post('/registration', AccountsController::class . ':registrationProcess')->setName('accounts.registrationProcess');
     flextype()->get('/profile/{email}', AccountsController::class . ':profile')->setName('accounts.profile');
-})->add('csrf');
+})->add(new CsrfMiddleware());
 
 flextype()->group('/accounts', function () {
     flextype()->post('/logout', AccountsController::class . ':logoutProcess')->setName('accounts.logoutProcess');
     flextype()->get('/profile/{email}/edit', AccountsController::class . ':profileEdit')->setName('accounts.profileEdit');
     flextype()->post('/profile/{email}/edit', AccountsController::class . ':profileEditProcess')->setName('accounts.profileEditProcess');
-})->add(new AclIsUserLoggedInMiddleware(['redirect' => 'accounts.login']))->add('csrf');
+})->add(new AclIsUserLoggedInMiddleware(['redirect' => 'accounts.login']))
+  ->add(new CsrfMiddleware());
