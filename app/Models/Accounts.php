@@ -118,7 +118,7 @@ class Accounts
               }
 
               // Decode account file content
-              $this->storage()->set('fetch.data', flextype('serializers')->frontmatter()->decode($accountFileContent));
+              $this->storage()->set('fetch.data', flextype('serializers')->yaml()->decode($accountFileContent));
 
               // Run event: onAccountsFetchSingleHasResult
               flextype('emitter')->emit('onAccountsFetchSingleHasResult');
@@ -260,9 +260,9 @@ class Accounts
 
         if (filesystem()->file($accountFile)->exists()) {
             $body  = filesystem()->file($accountFile)->get();
-            $account = flextype('serializers')->frontmatter()->decode($body);
+            $account = flextype('serializers')->yaml()->decode($body);
 
-            return (bool) filesystem()->file($accountFile)->put(flextype('serializers')->frontmatter()->encode(array_merge($account, $this->storage()->get('update.data'))));
+            return (bool) filesystem()->file($accountFile)->put(flextype('serializers')->yaml()->encode(array_merge($account, $this->storage()->get('update.data'))));
         }
 
         return false;
@@ -300,7 +300,7 @@ class Accounts
         // Create account file
         $accountFile = $accountDir . '/account.yaml';
         if (! filesystem()->file($accountFile)->exists()) {
-            return (bool) filesystem()->file($accountFile)->put(flextype('serializers')->frontmatter()->encode($this->storage()->get('create.data')));
+            return (bool) filesystem()->file($accountFile)->put(flextype('serializers')->yaml()->encode($this->storage()->get('create.data')));
         }
 
         return false;
