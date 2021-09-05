@@ -1,6 +1,6 @@
-{% extends 'themes/' ~ flextype.registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+{% extends 'themes/' ~ registry().get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
 
 {% block content %}
     <h3>{{ __('accounts_login') }}</h3>
-    {{ flextype.form.render(flextype.serializers.yaml.decode(filesystem().file(PATH_PROJECT ~ '/fieldsets/accounts-login.yaml').get()), {})|raw }}
+    {{ flextype.form.render(serializers().yaml.decode(filesystem().file(PATH_PROJECT ~ '/fieldsets/accounts-login.yaml').get()), {})|raw }}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'themes/' ~ flextype.registry.get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
+{% extends 'themes/' ~ registry().get('plugins.site.settings.theme') ~ '/templates/partials/base.html' %}
 
 {% block content %}
     <h3>{{ __('accounts_profile') }}</h3>
@@ -12,7 +12,7 @@
         </tr>
         {% endfor %}
     </table>
-    {% if flextype.acl.getUserLoggedInEmail() == profile.email %}
+    {% if acl().getUserLoggedInEmail() == profile.email %}
         <a href="{{ urlFor('accounts.profileEdit', {'email': profile.email}) }}">{{ __('accounts_profile_edit') }}</a>
         <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('accountsLogoutProcess').submit();">{{ __('accounts_logout') }}</a>
         <form id="accountsLogoutProcess" action="{{ urlFor('accounts.logoutProcess') }}" method="POST" style="display: none;">
