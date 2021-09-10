@@ -2,8 +2,8 @@ name: Accounts
 version: 1.10.0
 description: Accounts plugins for Flextype.
 icon:
-  name: user
-  set: "fontawesome|solid"
+  name: people
+  set: bootstrap
 author:
   name: Sergey Romanenko
   email: sergey.romanenko@flextype.org
@@ -16,7 +16,6 @@ dependencies:
   flextype: 0.9.16
   site: '>=1.0.0'
   twig: '>=2.0.0'
-  form: '>=1.0.0'
-  jquery: '>=1.0.0'
+  blueprints: '>=1.0.0'
   acl: '>=1.0.0'
   phpmailer: '>=1.0.0'

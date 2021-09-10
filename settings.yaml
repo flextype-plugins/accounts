@@ -59,12 +59,3 @@ logout:
   redirect:
     route:
       name: accounts.login
-
-
-fields:
-  uuid:
-    enabled: true
-  id:
-    enabled: true
-  registered_at:
-    enabled: true

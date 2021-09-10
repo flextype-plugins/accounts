@@ -40,30 +40,9 @@ The following dependencies need to be downloaded and installed for Accounts Plug
         slug:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/SlugField.php"
-        published_at:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/PublishedAtField.php"
-        published_by:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/PublishedByField.php"
-        modified_at:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/ModifiedAtField.php"
-        created_at:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/CreatedAtField.php"
-        created_by:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/CreatedByField.php"
-        routable:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/RoutableField.php"
         parsers:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/ParsersField.php"
-        visibility:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/VisibilityField.php"
         uuid:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/UuidField.php"
@@ -82,30 +61,12 @@ The following dependencies need to be downloaded and installed for Accounts Plug
         slug:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/SlugField.php"
-        published_at:
+        registered_at:
           enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/PublishedAtField.php"
-        published_by:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/PublishedByField.php"
-        modified_at:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/ModifiedAtField.php"
-        created_at:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/CreatedAtField.php"
-        created_by:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/CreatedByField.php"
-        routable:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/RoutableField.php"
+          path: "/project/plugins/accounts/core/Entries/Fields/RegisteredAtField.php"
         parsers:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/ParsersField.php"
-        visibility:
-          enabled: true
-          path: "/src/flextype/core/Entries/Fields/Default/VisibilityField.php"
         uuid:
           enabled: true
           path: "/src/flextype/core/Entries/Fields/Default/UuidField.php"

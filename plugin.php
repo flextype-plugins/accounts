@@ -34,24 +34,3 @@ $accountsLoader = require_once $accountsAutoload;
  * Include web routes
  */
 include_once 'routes/web.php';
-
-/**
- * Init accounts fields
- *
- * Load Flextype Accounts fields from directory /project/plugins/accounts/app/Fields/ based on plugins.accounts.settings.fields array
- */
-$accountFields = flextype('registry')->get('plugins.accounts.settings.fields');
-
-foreach ($accountFields as $fieldName => $field) {
-    $entryFieldFilePath = PATH['project'] . '/plugins/accounts/app/Fields/' . str_replace('_', '', ucwords($fieldName, '_')) . 'Field.php';
-    if (! file_exists($entryFieldFilePath)) {
-        continue;
-    }
-    include_once $entryFieldFilePath;
-}
-
-/**
- * Add Accounts Model to Flextype container
- */
-flextype()->container()['accounts'] = fn() => new Accounts();
-
